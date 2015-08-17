@@ -13,15 +13,16 @@ using Business;
 
 namespace WebAPI.Controllers
 {
-	//[EnableCors("http://localhost:3603,http://mjmbooks.azurewebsites.net", "*", "*")]	
-	[EnableCors("*", "*", "*")]
+[EnableCors("http://localhost:3603,http://mjmbooks.azurewebsites.net", "*", "*")]
 	public class PhotoController : ApiController
 	{
 		private IPhotoManager photoManager;
+		private BlobManager azurePhotoManager;
 
 		public PhotoController()
-			: this(new LocalPhotoManager(HttpRuntime.AppDomainAppPath))
+			//: this(new LocalPhotoManager(HttpRuntime.AppDomainAppPath))
 		{
+			azurePhotoManager = new BlobManager();
 		}
 
 		public PhotoController(IPhotoManager photoManager)
@@ -37,17 +38,24 @@ namespace WebAPI.Controllers
 		}
 
 		// POST: api/Photo
+		[HttpPost]
 		public async Task<IHttpActionResult> Post()
 		{
+			bool isAzure = true;
 			// Check if the request contains multipart/form-data.
 			if (!Request.Content.IsMimeMultipartContent("form-data"))
 			{
 				return BadRequest("mediatypen stöds inte");
 			}
-
+			IEnumerable<PhotoViewModel> photos;
 			try
 			{
-				var photos = await photoManager.Add(Request);
+				if (isAzure)
+				{
+					photos = await azurePhotoManager.Add(Request);
+					return Ok(new { Message = "Bilden har laddats upp", Photos = photos });
+				}
+				photos = await photoManager.Add(Request);
 				return Ok(new { Message = "Bilden har laddats upp", Photos = photos });
 			}
 			catch (Exception ex)

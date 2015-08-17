@@ -12,10 +12,10 @@ namespace MVC
 						"~/Scripts/jquery-{version}.js",
 						"~/Scripts/jquery-ui-{version}.js",
 						"~/Scripts/jquery.unobtrusive-ajax.min.js",
-						"~/Scripts/file-upload/jquery.fileupload.js",
-						"~/Scripts/file-upload/jquery.fileupload-ui.js",
-						"~/Scripts/file-upload/jquery.iframe-transport.js"
-						));
+						"~/Scripts/file-upload/jquery.ui.widget.js",
+						"~/Scripts/file-upload/jquery.iframe-transport.js",
+						"~/Scripts/file-upload/jquery.fileupload.js"
+			));
 
 			bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
 						"~/Scripts/jquery.validate*"));

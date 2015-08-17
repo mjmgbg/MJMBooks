@@ -1,6 +1,7 @@
 ﻿using Entities;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace MVC.Models
 {
 	public class GetApiResponse<T> where T : class
 	{
-		private readonly string baseUri = "http://mjmbooksapi.azurewebsites.net/";
+		private readonly string baseUri = ConfigurationManager.AppSettings["apiBaseUri"];
 
 		public BookDetailDTO BookForAdLibris { get; set; }
 

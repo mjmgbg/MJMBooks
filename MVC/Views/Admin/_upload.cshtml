@@ -23,9 +23,10 @@
         'use strict';
         isbn = $("#Book_ISBN").val();
         $('#upload').fileupload({
-            url: 'http://mjmbooksapi.azurewebsites.net/api/photo',
+            url: 'http://localhost:13281/api/photo',
             dataType: 'json',
-            withCredentials: true,
+            crossDomain: true,
+            type: "POST",
             formData: { isbn: isbn },
             add: function (e, data) {
                 jqXHRData = data;
