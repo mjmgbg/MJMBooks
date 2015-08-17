@@ -6,8 +6,9 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace Business
+namespace Entities
 {
 	public static class Helpers
 	{

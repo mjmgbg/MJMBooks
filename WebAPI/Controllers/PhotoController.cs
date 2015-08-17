@@ -1,68 +1,67 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
-using System.Web.Http;
-using Entities;
-using System.Web;
 using System.Threading.Tasks;
+using System.Web.Http;
 using System.Web.Http.Cors;
 using WebAPI.Models;
-using Business;
 
 namespace WebAPI.Controllers
 {
-[EnableCors("http://localhost:3603,http://mjmbooks.azurewebsites.net", "*", "*")]
+	[EnableCors("http://localhost:3603,http://mjmbooks.azurewebsites.net", "*", "*")]
 	public class PhotoController : ApiController
 	{
-		private IPhotoManager photoManager;
 		private BlobManager azurePhotoManager;
 
 		public PhotoController()
-			//: this(new LocalPhotoManager(HttpRuntime.AppDomainAppPath))
+		//: this(new LocalPhotoManager(HttpRuntime.AppDomainAppPath))
 		{
 			azurePhotoManager = new BlobManager();
-		}
-
-		public PhotoController(IPhotoManager photoManager)
-		{
-			this.photoManager = photoManager;
 		}
 
 		// GET: api/Photo
 		public async Task<IHttpActionResult> Get()
 		{
-			var results = await photoManager.Get();
-			return Ok(new { photos = results });
+			//	var results = await photoManager.Get();
+			//return Ok(new { photos = results });
+			return null;
 		}
 
 		// POST: api/Photo
 		[HttpPost]
-		public async Task<IHttpActionResult> Post()
+		public async Task<HttpResponseMessage> Post()
 		{
-			bool isAzure = true;
-			// Check if the request contains multipart/form-data.
-			if (!Request.Content.IsMimeMultipartContent("form-data"))
+			if (!Request.Content.IsMimeMultipartContent())
 			{
-				return BadRequest("mediatypen stöds inte");
+				throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
 			}
-			IEnumerable<PhotoViewModel> photos;
 			try
 			{
-				if (isAzure)
-				{
-					photos = await azurePhotoManager.Add(Request);
-					return Ok(new { Message = "Bilden har laddats upp", Photos = photos });
-				}
-				photos = await photoManager.Add(Request);
-				return Ok(new { Message = "Bilden har laddats upp", Photos = photos });
-			}
-			catch (Exception ex)
-			{
-				return BadRequest(ex.GetBaseException().Message);
-			}
+				// Read the form data.
+				var fileContent = await Request.Content.ReadAsMultipartAsync();
+				var isbn = string.Empty;
 
+				foreach (var file in fileContent.Contents)
+				{
+					if (file.Headers.ContentDisposition.Name.Contains("isbn"))
+					{
+						isbn = file.ReadAsStringAsync().Result;
+					}
+					
+					if (file.Headers.ContentType!=null)
+					{
+						var stream = file.ReadAsStreamAsync().Result;
+						var photo = await azurePhotoManager.Add(stream, isbn +".jpg");
+					
+						
+					}
+				}
+				return Request.CreateResponse(HttpStatusCode.OK);
+			}
+			catch (System.Exception e)
+			{
+				return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
+			}
 		}
 
 		// DELETE: api/Photo/5
@@ -70,21 +69,22 @@ namespace WebAPI.Controllers
 		[Route("{fileName}")]
 		public async Task<IHttpActionResult> Delete(string fileName)
 		{
-			if (!this.photoManager.FileExists(fileName))
-			{
-				return NotFound();
-			}
+			//if (!this.photoManager.FileExists(fileName))
+			//{
+			//	return NotFound();
+			//}
 
-			var result = await this.photoManager.Delete(fileName);
+			//var result = await this.photoManager.Delete(fileName);
 
-			if (result.Successful)
-			{
-				return Ok(new { message = result.Message });
-			}
-			else
-			{
-				return BadRequest(result.Message);
-			}
+			//if (result.Successful)
+			//{
+			//	return Ok(new { message = result.Message });
+			//}
+			//else
+			//{
+			//	return BadRequest(result.Message);
+			//}
+			return null;
 		}
 	}
 }

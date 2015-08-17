@@ -1,5 +1,4 @@
-﻿
-using Business;
+﻿using Entities;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -13,8 +12,6 @@ namespace WebAPI.Models
 	public static class ParseHTML
 	{
 		private static string html;
-
-
 		public static bool LoadDocument(string isbn)
 		{
 			WebClient client = new WebClient();

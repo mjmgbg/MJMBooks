@@ -10,122 +10,122 @@ using Entities;
 
 namespace Business
 {
-	public class LocalPhotoManager : IPhotoManager
+	public class LocalPhotoManager
 	{
 
-		private string workingFolder { get; set; }
+		//private string workingFolder { get; set; }
 
-		public LocalPhotoManager()
-		{
+		//public LocalPhotoManager()
+		//{
 
-		}
+		//}
 
-		public LocalPhotoManager(string workingFolder)
-		{
-			string clientFolder = workingFolder + "BookCovers\\";
-			this.workingFolder = clientFolder;
-			CheckTargetDirectory();
-		}
-		public void CopyHeadersFrom(HttpRequestMessage message, HttpRequestBase request)
-		{
-			if (request == null) { throw new ArgumentNullException("request"); };
-			if (message == null) { throw new ArgumentNullException("message"); };
-
-
-			foreach (string headerName in request.Headers)
-			{
-				string[] headerValues = request.Headers.GetValues(headerName);
-				if (!message.Headers.TryAddWithoutValidation(headerName, headerValues))
-				{
-					message.Content.Headers.TryAddWithoutValidation(headerName, headerValues);
-				}
-			}
-		}
-		public async Task<IEnumerable<PhotoViewModel>> Get()
-		{
-			List<PhotoViewModel> photos = new List<PhotoViewModel>();
-
-			DirectoryInfo photoFolder = new DirectoryInfo(this.workingFolder);
-
-			await Task.Factory.StartNew(() =>
-			{
-				photos = photoFolder.EnumerateFiles()
-											.Where(fi => new[] { ".jpg", ".bmp", ".png", ".gif", ".tiff" }.Contains(fi.Extension.ToLower()))
-											.Select(fi => new PhotoViewModel
-											{
-												Name = fi.Name,
-												Created = fi.CreationTime,
-												Modified = fi.LastWriteTime,
-												Size = fi.Length / 1024
-											})
-											.ToList();
-			});
-
-			return photos;
-		}
-
-		public async Task<PhotoActionResult> Delete(string fileName)
-		{
-			try
-			{
-				var filePath = Directory.GetFiles(this.workingFolder, fileName)
-								.FirstOrDefault();
-
-				await Task.Factory.StartNew(() =>
-				{
-					File.Delete(filePath);
-				});
-
-				return new PhotoActionResult { Successful = true, Message = fileName + "raderingen lyckades" };
-			}
-			catch (Exception ex)
-			{
-				return new PhotoActionResult { Successful = false, Message = "nåt gick fel " + ex.GetBaseException().Message };
-			}
-		}
-
-		public async Task<IEnumerable<PhotoViewModel>> Add(HttpRequestMessage request)
-		{
-			var provider = new PhotoMultipartFormDataStreamProvider(this.workingFolder);
-
-			await request.Content.ReadAsMultipartAsync(provider);
-			var isbn = provider.FormData.GetValues("isbn").FirstOrDefault();
+		//public LocalPhotoManager(string workingFolder)
+		//{
+		//	string clientFolder = workingFolder + "BookCovers\\";
+		//	this.workingFolder = clientFolder;
+		//	CheckTargetDirectory();
+		//}
+		//public void CopyHeadersFrom(HttpRequestMessage message, HttpRequestBase request)
+		//{
+		//	if (request == null) { throw new ArgumentNullException("request"); };
+		//	if (message == null) { throw new ArgumentNullException("message"); };
 
 
-			var photos = new List<PhotoViewModel>();
+		//	foreach (string headerName in request.Headers)
+		//	{
+		//		string[] headerValues = request.Headers.GetValues(headerName);
+		//		if (!message.Headers.TryAddWithoutValidation(headerName, headerValues))
+		//		{
+		//			message.Content.Headers.TryAddWithoutValidation(headerName, headerValues);
+		//		}
+		//	}
+		//}
+		//public async Task<IEnumerable<PhotoViewModel>> Get()
+		//{
+		//	List<PhotoViewModel> photos = new List<PhotoViewModel>();
 
-			foreach (var file in provider.FileData)
-			{
+		//	DirectoryInfo photoFolder = new DirectoryInfo(this.workingFolder);
 
-				var newFileName = Helpers.SetRightSizeImageAndSave(file.LocalFileName, isbn);
-				var fileInfo = new FileInfo(newFileName);
+		//	await Task.Factory.StartNew(() =>
+		//	{
+		//		photos = photoFolder.EnumerateFiles()
+		//									.Where(fi => new[] { ".jpg", ".bmp", ".png", ".gif", ".tiff" }.Contains(fi.Extension.ToLower()))
+		//									.Select(fi => new PhotoViewModel
+		//									{
+		//										Name = fi.Name,
+		//										Created = fi.CreationTime,
+		//										Modified = fi.LastWriteTime,
+		//										Size = fi.Length / 1024
+		//									})
+		//									.ToList();
+		//	});
 
-				photos.Add(new PhotoViewModel
-				{
-					Name = fileInfo.Name,
-					Created = fileInfo.CreationTime,
-					Modified = fileInfo.LastWriteTime,
-					Size = fileInfo.Length / 1024
-				});
-			}
+		//	return photos;
+		//}
 
-			return photos;
-		}
+		//public async Task<PhotoActionResult> Delete(string fileName)
+		//{
+		//	try
+		//	{
+		//		var filePath = Directory.GetFiles(this.workingFolder, fileName)
+		//						.FirstOrDefault();
 
-		public bool FileExists(string fileName)
-		{
-			var file = Directory.GetFiles(this.workingFolder, fileName)
-								.FirstOrDefault();
+		//		await Task.Factory.StartNew(() =>
+		//		{
+		//			File.Delete(filePath);
+		//		});
 
-			return file != null;
-		}
+		//		return new PhotoActionResult { Successful = true, Message = fileName + "raderingen lyckades" };
+		//	}
+		//	catch (Exception ex)
+		//	{
+		//		return new PhotoActionResult { Successful = false, Message = "nåt gick fel " + ex.GetBaseException().Message };
+		//	}
+		//}
 
-		private void CheckTargetDirectory()
-		{
-			if (!Directory.Exists(this.workingFolder))
-			{
-				throw new ArgumentException("Sökvägen " + this.workingFolder + " gick inte att hitta");
-			}
-		}
+		//public async Task<IEnumerable<PhotoViewModel>> Add(HttpRequestMessage request)
+		//{
+		//	var provider = new PhotoMultipartFormDataStreamProvider(this.workingFolder);
+
+		//	await request.Content.ReadAsMultipartAsync(provider);
+		//	var isbn = provider.FormData.GetValues("isbn").FirstOrDefault();
+
+
+		//	var photos = new List<PhotoViewModel>();
+
+		//	foreach (var file in provider.FileData)
+		//	{
+
+		//		var newFileName = Helpers.SetRightSizeImageAndSave(file.LocalFileName, isbn);
+		//		var fileInfo = new FileInfo(newFileName);
+
+		//		photos.Add(new PhotoViewModel
+		//		{
+		//			Name = fileInfo.Name,
+		//			Created = fileInfo.CreationTime,
+		//			Modified = fileInfo.LastWriteTime,
+		//			Size = fileInfo.Length / 1024
+		//		});
+		//	}
+
+		//	return photos;
+		//}
+
+		//public bool FileExists(string fileName)
+		//{
+		//	var file = Directory.GetFiles(this.workingFolder, fileName)
+		//						.FirstOrDefault();
+
+		//	return file != null;
+		//}
+
+		//private void CheckTargetDirectory()
+		//{
+		//	if (!Directory.Exists(this.workingFolder))
+		//	{
+		//		throw new ArgumentException("Sökvägen " + this.workingFolder + " gick inte att hitta");
+		//	}
+		//}
 	}
 }
