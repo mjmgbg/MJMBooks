@@ -1,10 +1,11 @@
-﻿using System.Diagnostics;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using WebAPI.Models;
+using Newtonsoft.Json;
 
 namespace WebAPI.Controllers
 {
@@ -14,7 +15,6 @@ namespace WebAPI.Controllers
 		private BlobManager azurePhotoManager;
 
 		public PhotoController()
-		//: this(new LocalPhotoManager(HttpRuntime.AppDomainAppPath))
 		{
 			azurePhotoManager = new BlobManager();
 		}
@@ -22,8 +22,6 @@ namespace WebAPI.Controllers
 		// GET: api/Photo
 		public async Task<IHttpActionResult> Get()
 		{
-			//	var results = await photoManager.Get();
-			//return Ok(new { photos = results });
 			return null;
 		}
 
@@ -40,6 +38,8 @@ namespace WebAPI.Controllers
 				// Read the form data.
 				var fileContent = await Request.Content.ReadAsMultipartAsync();
 				var isbn = string.Empty;
+				string message = "Kunde inte ladda upp filen";
+				bool isUploaded = false;
 
 				foreach (var file in fileContent.Contents)
 				{
@@ -47,16 +47,18 @@ namespace WebAPI.Controllers
 					{
 						isbn = file.ReadAsStringAsync().Result;
 					}
-					
-					if (file.Headers.ContentType!=null)
+
+					if (file.Headers.ContentType != null)
 					{
 						var stream = file.ReadAsStreamAsync().Result;
-						var photo = await azurePhotoManager.Add(stream, isbn +".jpg");
-					
-						
+						var photo = await azurePhotoManager.Add(stream, isbn + ".jpg");
+						isUploaded = true;
+						message = "Filen har laddats upp";
 					}
 				}
-				return Request.CreateResponse(HttpStatusCode.OK);
+				var returnMessage = new { isUploaded = isUploaded, message = message };
+				string json = JsonConvert.SerializeObject(returnMessage);
+				return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(json, Encoding.UTF8, "text/html") };
 			}
 			catch (System.Exception e)
 			{
