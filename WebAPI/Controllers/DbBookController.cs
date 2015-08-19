@@ -1,6 +1,7 @@
 ﻿using Data;
 using Entities;
 using System;
+using System.Configuration;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Cors;
@@ -46,7 +47,9 @@ namespace WebAPI.Controllers
 
 		public void Post([FromBody]BookDetailDTO model)
 		{
-			repo.Add(model);
+			string connectionString = ConfigurationManager.ConnectionStrings["storageConnection"].ConnectionString;
+			string path = ConfigurationManager.AppSettings["storagePath"];
+			repo.Add(connectionString, path, model);
 		}
 
 		public void Put(int id, [FromBody]BookModel book)

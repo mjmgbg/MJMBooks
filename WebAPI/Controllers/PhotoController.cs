@@ -6,17 +6,17 @@ using System.Web.Http;
 using System.Web.Http.Cors;
 using WebAPI.Models;
 using Newtonsoft.Json;
-
+using Business;
+using System.Configuration;
 namespace WebAPI.Controllers
 {
 	[EnableCors("http://localhost:3603,http://mjmbooks.azurewebsites.net", "*", "*")]
 	public class PhotoController : ApiController
 	{
-		private BlobManager azurePhotoManager;
-
+		
 		public PhotoController()
 		{
-			azurePhotoManager = new BlobManager();
+			
 		}
 
 		// GET: api/Photo
@@ -40,6 +40,7 @@ namespace WebAPI.Controllers
 				var isbn = string.Empty;
 				string message = "Kunde inte ladda upp filen";
 				bool isUploaded = false;
+				string connectionString = ConfigurationManager.ConnectionStrings["storageConnection"].ConnectionString;
 
 				foreach (var file in fileContent.Contents)
 				{
@@ -51,7 +52,7 @@ namespace WebAPI.Controllers
 					if (file.Headers.ContentType != null)
 					{
 						var stream = file.ReadAsStreamAsync().Result;
-						var photo = await azurePhotoManager.Add(stream, isbn + ".jpg");
+						var photo = await Helpers.UploadImageToBlob(connectionString, stream, isbn + ".jpg");
 						isUploaded = true;
 						message = "Filen har laddats upp";
 					}

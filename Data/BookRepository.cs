@@ -1,10 +1,9 @@
 ﻿using Entities;
+using Business;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-
-
 
 namespace Data
 {
@@ -18,11 +17,11 @@ namespace Data
 		}
 
 
-		public void Add(BookDetailDTO book)
+		public void Add(string connectionString, string path, BookDetailDTO book)
 		{
 			string textColor = string.Empty, bgColor = string.Empty, textColorSecond = string.Empty;
 			//Get colors that will be used in list display
-			var topFiveColor = Helpers.GetThreeColors(book.ImagePath);
+			var topFiveColor = Helpers.GetThreeColors(connectionString, path, book.ImagePath);
 			if (topFiveColor != null)
 			{
 				textColor = topFiveColor[1].R.ToString() + "," + topFiveColor[1].G.ToString() + "," + topFiveColor[1].B.ToString();

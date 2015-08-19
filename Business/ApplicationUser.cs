@@ -7,7 +7,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entities
+namespace Business
 {
 	public class ApplicationUser : IdentityUser
 	{

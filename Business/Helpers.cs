@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -7,9 +9,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
-namespace Entities
+namespace Business
 {
+	//Many of this methods are not used since started with Azure
+	//when all clients work - remove unnessary code 
 	public static class Helpers
 	{
 		private static void DeleteImage(string fileName)
@@ -106,19 +111,15 @@ namespace Entities
 			}
 		}
 
-		public static List<Color> GetThreeColors(string fileName)
-		{//TODO: Add to config
-			string workingFolder = AppDomain.CurrentDomain.BaseDirectory;
-			string clientFolder = workingFolder + "BookCovers\\";
-			fileName = clientFolder + fileName;
-			if (!fileName.Contains(".")) { return null; };
-			Bitmap bitmap = new Bitmap(fileName);
+		public static List<Color> GetThreeColors(string connectionString, string path, string fileName)
+		{
+			var bitmapImage=DownloadImageFromBlob(connectionString, path, fileName);
+			var image = ConvertBitmapImageToBitmap(bitmapImage);
 			List<Color> list = new List<Color>();
-
-			using (bitmap)
+			using (image)
 			{
 				var colorsWithCount =
-					GetPixels(bitmap)
+					GetPixels(image)
 					.Where(c => c.R < 240)
 					.GroupBy(color => color)
 						.Select(grp =>
@@ -225,5 +226,81 @@ namespace Entities
 			tempCat = tempCat.Replace("&#149;", "*");
 			return tempCat;
 		}
-	}
-}
+		private static CloudBlobContainer ConnectToBlob(string connectionString)
+		{
+			string containerName = "bookcovers";
+			var storageAccount =  CloudStorageAccount.Parse(connectionString);
+			var blobClient = storageAccount.CreateCloudBlobClient();
+			var container = blobClient.GetContainerReference(containerName);
+			return container;
+		}
+
+		private static void SetPermissionToBlob(CloudBlobContainer container)
+		{
+			var permissions = new BlobContainerPermissions()
+			{
+				PublicAccess = BlobContainerPublicAccessType.Blob
+			};
+			container.SetPermissions(permissions);
+		}
+		private static async Task<string> AddToBlob(CloudBlobContainer container, Stream fileStream, string fileName)
+		{		  // Verify that the user selected a file
+			if (fileStream != null)
+			{
+				using (var ms = new MemoryStream())
+				{
+					ImageResizer.ImageJob i = new ImageResizer.ImageJob(fileStream,
+							ms, new ImageResizer.ResizeSettings("width=200;height=200;format=jpg;mode=max"));
+					i.Build();
+					CloudBlockBlob blob = container.GetBlockBlobReference(fileName);
+					blob.Properties.ContentType = "image/jpg";
+					ms.Seek(0, SeekOrigin.Begin);
+					await blob.UploadFromStreamAsync(ms);
+					return blob.Uri.AbsoluteUri;
+				}
+			}
+			return string.Empty;
+		}
+		public static async Task<string> UploadImageToBlob(string connectionString, Stream fileStream, string fileName)
+		{
+			var container = ConnectToBlob(connectionString);
+			SetPermissionToBlob(container);
+			return await AddToBlob(container, fileStream, fileName);
+		}
+		private static BitmapImage GetBlobImage(CloudBlobContainer container, string path, string fileName)
+		{
+
+			//string path = ConfigurationManager.ConnectionStrings["storagePath"].ConnectionString;
+			CloudBlockBlob blob = container.GetBlockBlobReference(fileName);
+			using (var memoryStream = new MemoryStream())
+			{
+				blob.DownloadToStream(memoryStream);
+				var bitmap = new BitmapImage();
+				bitmap.BeginInit();
+				bitmap.StreamSource = memoryStream;
+				bitmap.CacheOption = BitmapCacheOption.OnLoad;
+				bitmap.EndInit();
+				return bitmap;
+			}
+		}
+		public static BitmapImage DownloadImageFromBlob(string connectionString, string path, string fileName)
+		{
+			var container = ConnectToBlob(connectionString);
+			SetPermissionToBlob(container);
+			return GetBlobImage(container, path, fileName);
+		}
+		private static Bitmap ConvertBitmapImageToBitmap(BitmapImage bitmapImage)
+		{
+			using (MemoryStream outStream = new MemoryStream())
+			{
+				BitmapEncoder enc = new BmpBitmapEncoder();
+				enc.Frames.Add(BitmapFrame.Create(bitmapImage));
+				enc.Save(outStream);
+				System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(outStream);
+
+				return new Bitmap(bitmap);
+			}
+		}
+
+
+	}}
