@@ -49,7 +49,6 @@ namespace Entities
 		public string TextColor { get; set; }
 		public string TextColorSecond { get; set; }
 		public DateTime CreateDate { get; set; }
-		public bool AlreadyInDb { get; set; }
 		[DisplayName("Har läst boken")]
 		public bool IsRead { get; set; }
 		

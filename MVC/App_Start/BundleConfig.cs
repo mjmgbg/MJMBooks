@@ -10,16 +10,21 @@ namespace MVC
 		{
 			bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
 						"~/Scripts/jquery-{version}.js",
-						"~/Scripts/jquery-ui-{version}.js",
-						"~/Scripts/jquery.unobtrusive-ajax.min.js",
-						"~/Scripts/file-upload/jquery.ui.widget.js",
-						"~/Scripts/file-upload/jquery.iframe-transport.js",
-						"~/Scripts/file-upload/jquery.fileupload.js"
-			));
+						"~/Scripts/jquery-ui-{version}.js"));
 
 			bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
-						"~/Scripts/jquery.validate*"));
+								 "~/Scripts/jquery.unobtrusive*",
+								"~/Scripts/jquery.validate*"));
+			bundles.Add(new ScriptBundle("~/bundles/app").Include(
+						 "~/Scripts/app.js"));
+							
+			bundles.Add(new ScriptBundle("~/bundles/upload").Include(
+					"~/Scripts/file-upload/jquery.ui.widget.js",
+					"~/Scripts/file-upload/jquery.iframe-transport.js",
+					"~/Scripts/file-upload/jquery.fileupload.js"));
 
+			bundles.Add(new ScriptBundle("~/bundles/appjs").Include(
+					"~/Scripts/app.js"));
 			// Use the development version of Modernizr to develop with and learn from. Then, when you're
 			// ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
 			bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(

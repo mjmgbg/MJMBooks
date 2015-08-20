@@ -1,20 +1,31 @@
-﻿<h3>Ange ISBN för att hämta information automatiskt</h3>
+﻿@model MVC.Models.ISBNViewModel
 
-@using (Ajax.BeginForm(actionName: "GetInfoFromAdlibris", controllerName: "Admin", routeValues: null,
-    ajaxOptions: new AjaxOptions { UpdateTargetId = "target", HttpMethod = "POST" },
-    htmlAttributes: new { @class = "form-inline", role = "form", id ="frmGetAdlibrisInfo" }))
+@using (Html.BeginForm())
 {
-
     @Html.AntiForgeryToken()
-    if (!string.IsNullOrWhiteSpace(ViewBag.Error))
-    {
-        <div id="error" class="alert alert-danger">@ViewBag.Error</div>
-    }
 
-    <div class="form-group">
-        <label class="sr-only" for="ISBN">ISBN:</label>
-        @Html.TextBox("ISBN", value: null, htmlAttributes: new { @class = "form-control", placeholder = "Ange ISBN" })
+    <div class="form-horizontal">
+        @if (Model!=null && Model.AlreadyInDb)
+        {
+            <div id="error">
+                @Html.Partial("_ErrorMessage")
+            </div>
+        }
+        <div class="form-group">
+            @Html.LabelFor(model => model.Isbn, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Isbn, new { htmlAttributes = new { @class = "form-control" } })
+
+                <div>
+                    @Html.ValidationMessageFor(model => model.Isbn, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Hämta infomation" class="btn btn-default" />
+            </div>
+        </div>
     </div>
-    <button type="submit" class="btn btn-default">Hämta information</button>
-
 }

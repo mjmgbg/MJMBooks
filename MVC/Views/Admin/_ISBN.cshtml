@@ -1,0 +1,11 @@
+﻿
+<h3>Ange ISBN för att hämta information automatiskt</h3>
+
+   @using (Ajax.BeginForm(actionName: "GetInfoFromAdlibris", controllerName: "Admin", routeValues: null,
+    ajaxOptions: new AjaxOptions { UpdateTargetId = "target", HttpMethod = "POST", LoadingElementId = "loaderDiv",
+    },
+    htmlAttributes: new { @class = "form-inline", role = "form", id = "frmISBN" }))
+   {
+
+        @Html.Partial("_GetBookInfoFromISBN")
+   }

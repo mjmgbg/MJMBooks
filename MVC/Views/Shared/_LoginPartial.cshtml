@@ -13,13 +13,15 @@
             @Ajax.ActionLink(linkText: "Lägg till bok",
             actionName: "Add", controllerName: "Admin", routeValues: null,
             ajaxOptions: new AjaxOptions
-            {
+            {                
                 UpdateTargetId = "target",
-                InsertionMode = InsertionMode.Replace
+                InsertionMode = InsertionMode.Replace,
+                LoadingElementId = "loaderDiv" 
             },
             htmlAttributes: new { id = "AddBook" })
 
         </li>
+        <li>@Html.ActionLink("Test", "Add", "Admin")</li>
         <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
     </ul>
     }

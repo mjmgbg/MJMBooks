@@ -2,7 +2,9 @@
 using MVC.Models;
 using System;
 using System.IO;
+using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -27,46 +29,36 @@ namespace MVC.Controllers
 			return View();
 		}
 
-		public PartialViewResult Add()
+		public ActionResult Add()
 		{
-			return PartialView("_GetBookInfoFromISBN");
+			return PartialView("_ISBN");
 		}
-
-		public PartialViewResult AddWithError(int error)
-		{
-			if (error == 1)
-			{
-				ViewBag.Error = "Du måste ange ISBN";
-			}
-			else
-			{
-				ViewBag.Error = "Något gick fel - försök igen.";
-			}
-
-			return PartialView("_GetBookInfoFromISBN");
-		}
-
-		public ActionResult EditBookList()
-		{
-			return null;
-
-			//return View("ListBooks", CacheHelper.GetAllBooks("0", "0"));
-		}
-
 
 		[HttpPost]
-		public ActionResult GetInfoFromAdlibris(string ISBN)
+		public async Task<ActionResult> GetInfoFromAdlibris(ISBNViewModel model)
 		{
-			if (!string.IsNullOrWhiteSpace(ISBN))
-			{
-				var model = new BookViewModel();
 
-				apiModelAdLibris.BookForAdLibris = apiModelAdLibris.GetBookFromAdlibris(ISBN, "api/AdLibris/");
-				model.Book = apiModelAdLibris.BookForAdLibris;
-				return PartialView("_BookInfo", model);
+			if (model == null)
+			{
+				throw new ArgumentNullException("model");
+			}
+			if (ModelState.IsValid)
+			{
+				var savedInDb = await apiModelBook.IsBookInDb("api/DbBook?isbn=", model.Isbn);
+				model.AlreadyInDb = savedInDb;
+
+				if (model.AlreadyInDb)
+				{
+					return PartialView("_ISBN", model);
+				}
+				var bookModel = new BookViewModel();
+
+				apiModelAdLibris.BookForAdLibris = apiModelAdLibris.GetBookFromAdlibris(model.Isbn, "api/AdLibris/");
+				bookModel.Book = apiModelAdLibris.BookForAdLibris;
+				return PartialView("_BookInfo", bookModel);
 			}
 			
-			return RedirectToAction("AddWithError", new { error = 1 });
+			return PartialView("_ISBN", model);
 		}
 
 		[HttpPost]
@@ -74,14 +66,6 @@ namespace MVC.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				var savedInDb = await apiModelBook.IsBookInDb("api/DbBook?isbn=", model.Book.ISBN);
-				model.Book.AlreadyInDb = savedInDb;
-
-				if (model.Book.AlreadyInDb)
-				{
-					return View("_BookInfo", model);
-				}
-
 				apiModelBook.SaveBookToDb("api/DbBook/", model.Book);
 				return PartialView("_BookSaved");
 			}
@@ -97,6 +81,14 @@ namespace MVC.Controllers
 				return View("EditBook", book);
 			}
 			return View("EditBook");
+		}
+
+
+		public ActionResult EditBookList()
+		{
+			return null;
+
+			//return View("ListBooks", CacheHelper.GetAllBooks("0", "0"));
 		}
 
 		[HttpPost]
