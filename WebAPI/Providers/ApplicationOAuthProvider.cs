@@ -10,7 +10,7 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
 using WebAPI.Models;
-using Entities;
+using Business;
 
 namespace WebAPI.Providers
 {
