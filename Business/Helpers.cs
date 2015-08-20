@@ -275,6 +275,7 @@ namespace Business
 			using (var memoryStream = new MemoryStream())
 			{
 				blob.DownloadToStream(memoryStream);
+				memoryStream.Seek(0, SeekOrigin.Begin);
 				var bitmap = new BitmapImage();
 				bitmap.BeginInit();
 				bitmap.StreamSource = memoryStream;
