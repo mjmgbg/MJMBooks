@@ -62,6 +62,11 @@
     <Compile Include="BookRepository.cs" />
     <Compile Include="DBContextBook.cs" />
     <Compile Include="DBContextUser.cs" />
+    <Compile Include="Migrations\201508210649395_Init.cs" />
+    <Compile Include="Migrations\201508210649395_Init.Designer.cs">
+      <DependentUpon>201508210649395_Init.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -77,6 +82,11 @@
       <Project>{14b37027-c3d0-44b8-b1eb-5412a15c0e88}</Project>
       <Name>Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201508210649395_Init.resx">
+      <DependentUpon>201508210649395_Init.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
