@@ -311,6 +311,10 @@ namespace Data
 		{
 			fName = fName.First().ToString().ToUpper() + fName.Substring(1);
 			lName = lName.First().ToString().ToUpper() + lName.Substring(1);
+
+			fName = FixDoubleBarrelledName(fName);
+			lName = FixDoubleBarrelledName(lName); 
+
 			var newAuthor = new AuthorModel
 			{
 				FirstName = fName,
@@ -346,6 +350,9 @@ namespace Data
 		{
 			fName = fName.First().ToString().ToUpper() + fName.Substring(1);
 			lName = lName.First().ToString().ToUpper() + lName.Substring(1);
+
+			fName = FixDoubleBarrelledName(fName); 
+			lName = FixDoubleBarrelledName(lName); 
 			var newReader = new ReaderModel
 			{
 				FirstName = fName,
@@ -354,6 +361,18 @@ namespace Data
 			context.Readers.Add(newReader);
 			context.SaveChanges();
 			return newReader;
+		}
+
+		private string FixDoubleBarrelledName(string name)
+		{
+			if (name.IndexOf("-") > -1)
+			{
+				string[] temp = name.Split('-');
+				name = temp[0] + "-" + temp[1].First().ToString().ToUpper() + temp[1].Substring(1);
+
+			}
+
+			return name;
 		}
 
 	
