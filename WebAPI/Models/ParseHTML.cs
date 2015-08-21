@@ -80,15 +80,19 @@ namespace WebAPI.Models
 			string description = string.Empty;
 			int start = html.IndexOf("<span itemprop=\"description\">");
 			int end = html.IndexOf("class=\"productReview");
-			description = html.Substring(start, (end) - start);
-			start = description.IndexOf(">");
-			end = description.IndexOf("</span>");
-			description = description.Substring(start + 1, (end) - start - 1);
-			description = Helpers.StripTagsCharArray(description);
-			description = Helpers.HandleSpecialChars(description);
-			description = Helpers.AddSpacesToSentence(description, true);
-			description = description.Trim();
-			return description;
+			if (start > 0)
+			{
+				description = html.Substring(start, (end) - start);
+				start = description.IndexOf(">");
+				end = description.IndexOf("</span>");
+				description = description.Substring(start + 1, (end) - start - 1);
+				description = Helpers.StripTagsCharArray(description);
+				description = Helpers.HandleSpecialChars(description);
+				description = Helpers.AddSpacesToSentence(description, true);
+				description = description.Trim();
+				return description;
+			}
+			return string.Empty;
 		}
 
 		public static string GetSeries()
@@ -107,10 +111,8 @@ namespace WebAPI.Models
 				series = Helpers.HandleSpecialChars(series);
 				return series;
 			}
-			else
-			{
-				return string.Empty;
-			}
+			return string.Empty;
+			
 		}
 
 
@@ -194,13 +196,17 @@ namespace WebAPI.Models
 		{
 			string language = string.Empty;
 			int start = html.IndexOf("<span id=\"ctl00_main_frame_ctrlproduct_lblLanguage\">");
-			var tag = html.Substring(start);
-			int end = tag.IndexOf("</span>");
-			tag = tag.Substring(0, end);
-			start = tag.IndexOf(">");
-			language = tag.Substring(start + 1);
-			language = Helpers.HandleSpecialChars(language);
-			return language;
+			if (start > 0)
+			{
+				var tag = html.Substring(start);
+				int end = tag.IndexOf("</span>");
+				tag = tag.Substring(0, end);
+				start = tag.IndexOf(">");
+				language = tag.Substring(start + 1);
+				language = Helpers.HandleSpecialChars(language);
+				return language;
+			}
+			return string.Empty;
 		}
 
 	
