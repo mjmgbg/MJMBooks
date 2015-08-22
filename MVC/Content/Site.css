@@ -1,77 +1,312 @@
 ﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
+	padding-top: 50px;
+	padding-bottom: 20px;
 }
 
 /* Set padding to keep content from hitting the edges */
 .body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+	padding-left: 15px;
+	padding-right: 15px;
 }
 
 /* Override the default bootstrap behavior where horizontal description lists
    will truncate terms that are too long to fit in the left column
 */
 .dl-horizontal dt {
-    white-space: normal;
+	white-space: normal;
 }
 
 /* Set width on the form input elements since they're 100% wide by default */
 input,
 select,
 textarea {
-    max-width: 280px;
+	max-width: 280px;
 }
+
+
 
 .fileinput-button {
-    position: relative;
-    overflow: hidden;
+	position: relative;
+	overflow: hidden;
 }
 
-    .fileinput-button input {
-        position: absolute;
-        top: 0;
-        right: 0;
-        margin: 0;
-        opacity: 0;
-        -ms-filter: 'alpha(opacity=0)';
-        font-size: 200px;
-        direction: ltr;
-        cursor: pointer;
-    }
+	.fileinput-button input {
+		position: absolute;
+		top: 0;
+		right: 0;
+		margin: 0;
+		opacity: 0;
+		-ms-filter: 'alpha(opacity=0)';
+		font-size: 200px;
+		direction: ltr;
+		cursor: pointer;
+	}
 
 /* Fixes for IE < 8 */
 @media screen\9 {
-    .fileinput-button input {
-        filter: alpha(opacity=0);
-        font-size: 100%;
-        height: 100%;
-    }
+	.fileinput-button input {
+		filter: alpha(opacity=0);
+		font-size: 100%;
+		height: 100%;
+	}
 }
 
 #lblImagePath {
-    left: 48px;
-    position: relative;
+	left: 48px;
+	position: relative;
 }
 
 .ImagePathLabel {
-    left: 4.6em;
-    position: relative;
+	left: 4.6em;
+	position: relative;
 }
 
 #uploadFrame {
-    position: relative;
-    width: 100%;
+	position: relative;
+	width: 100%;
 }
 
 #uploadButtons {
-    left: 6em;
-    position: relative;
+	left: 6em;
+	position: relative;
 }
 
 .save {
-    padding-left: 0px;
+	padding-left: 0px;
 }
+.form-group {
+	clear: both;
+	overflow: hidden;
+}
+
+.links {
+	margin-top: 20px;
+	text-align: center;
+}
+
+.jaf-container {
+	position: relative;
+	padding: 0;
+}
+
+.book-container {
+	position: relative;
+	width:200px;
+	margin:20px 20px 0 0;
+}
+
+.title-name {
+	font-weight: bold;
+	white-space: nowrap;
+	overflow: hidden;
+	-ms-text-overflow: ellipsis;
+	-o-text-overflow: ellipsis;
+	text-overflow: ellipsis;
+}
+
+.author-name {
+	opacity: 1;
+	margin-bottom: 2px;
+	color: #888;
+	font-size: 12px;
+	white-space: nowrap;
+	overflow: hidden;
+	-ms-text-overflow: ellipsis;
+	-o-text-overflow: ellipsis;
+	text-overflow: ellipsis;
+	-webkit-transition: all 0.2s ease-in;
+	-moz-transition: all 0.2s ease-in;
+	-o-transition: all 0.2s ease-in;
+	transition: all 0.2s ease-in;
+}
+
+.app-folders-container {
+	width: 100%;
+	margin: 0 auto;
+}
+
+.active-tool {
+	z-index: 10;
+}
+
+	.active-tool::before {
+		bottom: -1px;
+		margin-left: -7px;
+		border-left: 12px solid transparent;
+		border-right: 12px solid transparent;
+		border-bottom: 12px solid rgba(0,0,0,0.3);
+		-moz-transition: all 0.2s ease-in;
+		-o-transition: all 0.2s ease-in;
+		-webkit-transition: all 0.2s ease-in;
+		transition: all 0.2s ease-in;
+	}
+
+	.active-tool::after {
+		bottom: -1px;
+		margin-left: -6px;
+		border-left: 11px solid transparent;
+		border-right: 11px solid transparent;
+		border-bottom: 11px solid transparent;
+		-moz-transition: all 0.2s ease-in;
+		-o-transition: all 0.2s ease-in;
+		-webkit-transition: all 0.2s ease-in;
+		transition: all 0.2s ease-in;
+	}
+
+	.active-tool img {
+		max-width: 110%;
+		margin-top: -5%;
+		margin-left: -5%;
+		-moz-transition: all 0.2s ease-in;
+		-o-transition: all 0.2s ease-in;
+		-webkit-transition: all 0.2s ease-in;
+		transition: all 0.2s ease-in;
+	}
+
+	.active-tool .album-name {
+		padding-bottom: 6px;
+		-moz-transition: all 0.2s ease-in;
+		-o-transition: all 0.2s ease-in;
+		-webkit-transition: all 0.2s ease-in;
+		transition: all 0.2s ease-in;
+	}
+
+	.active-tool .artist-name {
+		opacity: 0;
+		height: 2px;
+		-moz-transition: all 0.2s ease-in;
+		-o-transition: all 0.2s ease-in;
+		-webkit-transition: all 0.2s ease-in;
+		transition: all 0.2s ease-in;
+	}
+
+.folderContent {
+	position: absolute;
+	z-index: 0;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	min-width: 320px;
+	padding: 20px 0 0 60px;
+	background-color: #aaa;
+	border: 1px solid rgba(0,0,0,0.3);
+	border-width: 1px 0;
+	-moz-transition: all 0.2s ease-in;
+	-o-transition: all 0.2s ease-in;
+	-webkit-transition: all 0.2s ease-in;
+	transition: all 0.2s ease-in;
+}
+
+ .folderContent:nth-of-type(2) {
+	/*left: 400px;*/
+}
+
+
+.folderContent .close {
+	position: absolute;
+	top: 15px;
+	left: 10px;
+	padding: 1px 5px 3px;
+	border-radius: 10px;
+	background-color: rgba(0,0,0,0.3);
+	color: rgba(255,255,255,0.5);
+	font-weight: bold;
+}
+
+.folderContent .close:hover {
+	text-decoration: none;
+	background-color: rgba(0,0,0,0.6);
+	color: rgba(255,255,255,0.5);
+}
+
+.multi {
+	-webkit-column-count: 2;
+	-moz-column-count: 2;
+	column-count: 2;
+}
+
+.art-wrap {
+	float: right;
+	text-align: right;
+	/*width: 30%;*/
+}
+
+.art-wrap img {
+	position: relative;
+	z-index: -2;
+	display: block;
+	width: 100%;
+	max-width: 300px;
+}
+
+.clear {
+	clear: both;
+}
+
+@media (max-width: 480px){
+
+	.folder {
+		height: 145px;
+	}
+
+	.folderContent {
+		padding: 20px 40px;
+		width: 100%;
+	}
+
+}
+
+@media (min-width: 481px) and (max-width: 768px){
+
+	.folder {
+		height: 210px;
+	}
+}
+
+@media (max-width: 768px){
+
+	.multi {
+		-webkit-column-count: 1;
+		-moz-column-count: 1;
+		column-count: 1;
+	}
+
+	.art-wrap {
+		display: none;
+	}
+}
+
+@media (min-width: 769px){
+
+	.jaf-row {
+		width: 800px;
+		margin: 0 auto;
+	}
+}
+
+.cssSlideUp {
+	-moz-transition: .5s linear all;
+	-o-transition: .5s linear all;
+	-webkit-transition: .5s linear all;
+	transition: .5s linear all;
+	height: 80px;
+	overflow: hidden;
+}
+.cssSlideUp.hide {
+	height:0;
+}
+
+#loaderDiv {
+   position: fixed;
+   top: 0;
+   right: 0;
+   bottom: 0;
+   left: 0;
+   z-index: 1100;
+   background-color: white;
+   opacity: .6;
+}
+
 .ajax-loader {
    position: absolute;
    left: 50%;
@@ -80,7 +315,6 @@ textarea {
    margin-top: -32px; /* -1 * image height / 2 */
    display: block;
 }
-.form-group {
-    clear: both;
-    overflow: hidden;
+.move-row {
+	position:relative;
 }

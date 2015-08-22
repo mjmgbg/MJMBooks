@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Entities;
+using MVC.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,9 +10,18 @@ namespace MVC.Controllers
 {
 	public class HomeController : Controller
 	{
+		private GetApiResponse<BookModel> apiModelBook;
+		public HomeController()
+		{
+			apiModelBook = new GetApiResponse<BookModel>();
+		}
 		public ActionResult Index()
 		{
-			return View();
+			var model = new StartPageViewModel();
+			GetApiResponse<BookModel> apiModelBook = new GetApiResponse<BookModel>();
+			model.BookList = apiModelBook.GetAllBooksFromDb("api/DbBook?");
+			
+			return View(model);
 		}
 
 		public ActionResult About()

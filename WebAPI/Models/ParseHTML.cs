@@ -68,7 +68,15 @@ namespace WebAPI.Models
 			{
 				year = mYear.Groups[1].Value.Substring(0, 4);
 				month = mYear.Groups[1].Value.Substring(4, 2);
-				day = mYear.Groups[1].Value.Substring(6, 2);
+				if (mYear.Groups[1].Value.Length>7)
+				{
+					day = mYear.Groups[1].Value.Substring(6, 2);
+				}
+				else
+				{
+					day = "01";
+				}
+				
 			}
 
 			return year + "-" + month + "-" + day;

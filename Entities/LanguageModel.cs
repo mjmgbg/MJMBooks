@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Entities
 {
-	public class LanguageModel : IDBLookup
+	public class LanguageModel
 	{
 		public int Id { get; set; }
 		[Display(Name = "Språk:")]

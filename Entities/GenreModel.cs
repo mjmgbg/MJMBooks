@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Entities
 {
-	public class GenreModel : IDBLookup
+	public class GenreModel 
 	{
 		public int Id { get; set; }
 		[Display(Name = "Genre")]

@@ -16,7 +16,6 @@ namespace Data
 			context = dbContext as DBContextBook;
 		}
 
-
 		public void Add(string connectionString, string path, BookDetailDTO book)
 		{
 			string textColor = string.Empty, bgColor = string.Empty, textColorSecond = string.Empty;
@@ -27,6 +26,11 @@ namespace Data
 				textColor = topFiveColor[1].R.ToString() + "," + topFiveColor[1].G.ToString() + "," + topFiveColor[1].B.ToString();
 				bgColor = topFiveColor[0].R.ToString() + "," + topFiveColor[0].G.ToString() + "," + topFiveColor[0].B.ToString();
 				textColorSecond = topFiveColor[2].R.ToString() + "," + topFiveColor[2].G.ToString() + "," + topFiveColor[2].B.ToString();
+				if (int.Parse(topFiveColor[0].R.ToString())<50)
+				{
+					textColor = textColorSecond;
+					textColorSecond = bgColor;
+				}
 			}
 			SeriesModel series = new SeriesModel();
 
@@ -99,6 +103,9 @@ namespace Data
 				Language =b.Language,
 				Publisher = b.Publisher,
 				PublishingDate = b.PublishingDate,
+				BgColor=b.BgColor,
+				TextColor=b.TextColor,
+				TextColorSecond=b.TextColorSecond,
 			}).ToList();
 			return books;
 		}
@@ -127,7 +134,7 @@ namespace Data
 
 		private List<GenreModel> GetBookGenres(int id)
 		{
-			return context.Genres.SelectMany(g => g.Books.Where(b => b.Id == id), (a, b) => a).Select(c => new GenreModel
+			return context.Genres.SelectMany(g => g.Books.Where(b => b.Id == id), (a, b) => a).AsEnumerable().Select(c => new GenreModel
 			{
 				Id = c.Id,
 				Name = c.Name
@@ -136,17 +143,21 @@ namespace Data
 
 		private List<AuthorModel> GetBookAuthors(int id)
 		{
-			return context.Authors.SelectMany(a => a.Books.Where(b => b.Id == id), (a, b) => a).Select(c => new AuthorModel
+			var baseList = context.Authors.SelectMany(a => a.Books.Where(b => b.Id == id), (a, b) => a).AsEnumerable().Select(c => new AuthorModel
 			{
 				FirstName = c.FirstName,
 				LastName = c.LastName,
 				Id = c.Id
 			}).ToList();
+
+	
+			return baseList;
+		
 		}
 
 		private List<ReaderModel> GetBookReaders(int id)
 		{
-			return context.Readers.SelectMany(a => a.Books.Where(b => b.Id == id), (a, b) => a).Select(c => new ReaderModel
+			return context.Readers.SelectMany(a => a.Books.Where(b => b.Id == id), (a, b) => a).AsEnumerable().Select(c => new ReaderModel
 			{
 				FirstName = c.FirstName,
 				LastName = c.LastName,
@@ -179,13 +190,17 @@ namespace Data
 		}
 
 		private List<GenreModel> GetGenresByName(string genres)
-		{
-			var list = new List<GenreModel>();
-			string[] names = genres.Split(';');
-			foreach (var item in names)
+		{var list = new List<GenreModel>();
+			if (genres!=null)
 			{
-				list.Add(GetGenreByName(item));
+				
+				string[] names = genres.Split(';');
+				foreach (var item in names)
+				{
+					list.Add(GetGenreByName(item));
+				}		
 			}
+		
 			return list;
 		}
 

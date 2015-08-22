@@ -1,4 +1,77 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿@using MVC.Models
+@model StartPageViewModel
+@{
+    ViewBag.Title = "Ljudböcker";
+    var i = 0;
+    var rowNr = 0;
+    var left = Model.BookList.Count() % 4;
+    
 }
-<div id="target"></div>
+<div id="target">
+    <div id="divList">
+        <section class="section">
+            <div class="content">
+                @if (Model.ErrorInSearchResult)
+                {
+                    <span>Något gick fel, vad synd</span>
+                }
+                else if (Model.NoSearchResultFound)
+                {
+                    <span>Inget sökresultat hittades</span>
+                }
+                else
+                {
+                    foreach (var item in Model.BookList)
+                    {
+                        if (i % 4 == 0)
+                        {
+                            if (rowNr > 0)
+                            {
+                                @:</div>
+                            }
+                            @:<div class="row move-row" id="row-@rowNr"  data-rowId="@rowNr">
+                            rowNr++;
+                        }
+                        <div id="@item.Id" class="book-container col-md-3">
+                            <img src="https://mjmstorage.blob.core.windows.net/bookcovers/@item.ImagePath" />
+                          
+                            <div class="text-center">
+                                <div class="title-name">@item.Title</div>
+                                <div class="author-name">@Model.GetAuthors(item)</div>
+                            </div>
+                           
+                        </div>
+    <div id="folder-@item.Id" class="folderContent" style="display: none; background-color: rgb(@item.BgColor);" data-rowId="@rowNr">
+        <div class="jaf-container">
+            <div>
+                <div class="art-wrap" style="box-shadow: 12px 15px 20px rgb(@item.BgColor) inset, -1px -1px 150px rgb(@item.BgColor) inset;">
+                    <img src="https://mjmstorage.blob.core.windows.net/bookcovers/@item.ImagePath"/>
+                </div>
+                <div class="" style="color: rgb(@item.TextColor);">@Model.GetAuthors(item)</div>
+                <div class="" style="color: rgb(@item.TextColor);">@item.Title</div>
+                <h3 class="secondaryColor" style="color: rgb(@item.TextColor);">@item.PublishingDate </h3>
+                <div class="multi">
+                    <div style="color: rgb(@item.TextColor);">@item.Description</div>
+                </div>
+            </div>
+            <br class='clear'>
+        </div>        
+    </div>
+
+                        i++;
+                    }
+                    if (left != 0)
+                    {
+                        for (i = 0; i < left; i++)
+                        {
+                             <div class="book-container col-md-3"></div>
+                        }
+                       @:</div>
+                    }
+                    
+                }
+            </div>
+        </section>
+
+    </div>
+</div>

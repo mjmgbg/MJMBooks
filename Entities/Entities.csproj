@@ -48,8 +48,7 @@
     <Compile Include="BookModel.cs" />
     <Compile Include="FileUpload.cs" />
     <Compile Include="GenreModel.cs" />
-    <Compile Include="IDBLookup.cs" />
-    <Compile Include="IDBPerson.cs" />
+    <Compile Include="IPerson.cs" />
     <Compile Include="LanguageModel.cs" />
     <Compile Include="PhotoActionResult.cs" />
     <Compile Include="PhotoViewModel.cs" />

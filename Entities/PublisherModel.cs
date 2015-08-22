@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Entities
 {
-	public class PublisherModel : IDBLookup
+	public class PublisherModel
 	{
 		public int Id { get; set; }
 		[Display(Name = "Förlag:")]

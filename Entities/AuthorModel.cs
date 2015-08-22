@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Entities
 {
-	public class AuthorModel : IDBPerson
+	public class AuthorModel: IPerson
 	{
 		public int Id { get; set; }
 		public string FirstName { get; set; }

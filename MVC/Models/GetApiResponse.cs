@@ -14,7 +14,7 @@ namespace MVC.Models
 
 		public BookDetailDTO BookForAdLibris { get; set; }
 
-		public BookViewModel Book { get; set; }
+		public BookModel Book { get; set; }
 
 		public List<BookViewModel> Books { get; set; }
 
@@ -140,14 +140,14 @@ namespace MVC.Models
 			return null;
 		}
 
-		public List<BookViewModel> GetAllBooksFromDb(string path)
+		public List<BookModel> GetAllBooksFromDb(string path)
 		{
-			return GetListInfoFromWebApi(path, "") as List<BookViewModel>;
+			return GetListInfoFromWebApi(path, "") as List<BookModel>;
 		}
 
-		public BookViewModel GetBookFromDbById(string path, int id)
+		public BookModel GetBookFromDbById(string path, int id)
 		{
-			Book = GetInfoFromWebApi(path, id.ToString()) as BookViewModel;
+			Book = GetInfoFromWebApi(path, id.ToString()) as BookModel;
 			return Book;
 		}
 

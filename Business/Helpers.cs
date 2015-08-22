@@ -132,30 +132,27 @@ namespace Business
 
 				list.Add(colorsWithCount.FirstOrDefault().Color);
 
-				//Change order of colors if background is bright
-				if (colorsWithCount.FirstOrDefault().Color.R > 200)
-				{
-					list.Add(colorsWithCount.LastOrDefault().Color);
-				}
 
-				if (colorsWithCount.LastOrDefault().Color.R < colorsWithCount.FirstOrDefault().Color.R + 50)
-				{
-					var maxValue = colorsWithCount.Max(c => c.Color.R) - 100;
-					list.Add(colorsWithCount.Where(c => c.Color.R > maxValue).FirstOrDefault().Color);
-				}
-				else
-				{
-					list.Add(colorsWithCount.LastOrDefault().Color);
-				}
+				var colorsWithBrightness =
+					GetPixels(image)
+					.Where(c => c.R < 240)
+					.GroupBy(color => color)
+						.Select(grp =>
+							new
+							{
+								Color = grp.Key,
+								Brightness = grp.Key.GetBrightness()
+								
+							})
+						.OrderByDescending(x => x.Brightness);
 
-				var avgValue = colorsWithCount.Average(c => c.Color.R);
 
-				if (colorsWithCount.FirstOrDefault().Color.R <= 200)
-				{
-					list.Add(colorsWithCount.LastOrDefault().Color);
-				}
+				//list.Add(colorsWithBrightness.LastOrDefault().Color);
+				var avgValue = Convert.ToInt32(colorsWithCount.Average(c => c.Color.R));
+				list.Add(colorsWithCount.Where(c => c.Color.R == avgValue).FirstOrDefault().Color);
+				list.Add(colorsWithBrightness.FirstOrDefault().Color);
 
-				list.Add(colorsWithCount.LastOrDefault().Color);
+
 
 				return list;
 			}

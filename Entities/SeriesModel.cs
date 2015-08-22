@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Entities
 {
-	public class SeriesModel : IDBLookup
+	public class SeriesModel 
 	{
 		public int Id { get; set; }
 
