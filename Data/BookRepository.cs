@@ -34,20 +34,24 @@ namespace Data
 			}
 			var series = new SeriesModel();
 			var seriesPart = new SeriesPartNumberModel();
-			if (book.SeriesName != string.Empty && book.SeriesName != null)
+			int ?seriesId =null, seriesPartId=null;
+			if (!string.IsNullOrEmpty(book.SeriesName))
 			{
 				series = GetSeriesByName(book.SeriesName);
 				seriesPart = GetSeriesPartByNameAndNumber(series.Name, GetSeriesNumberFromString(book.SeriesName));
+				seriesId=series.Id;
+				seriesPartId=seriesPart.Id;
 			}
 			else
 			{
 				series = null;
 				seriesPart = null;
+				
 			}
 
 			var readers = new List<ReaderModel>();
 
-			if (book.ReaderNames != string.Empty && book.ReaderNames != null)
+			if (!string.IsNullOrEmpty(book.ReaderNames))
 			{
 				readers = GetReadersByName(book.ReaderNames).ToList();
 			}
@@ -62,7 +66,9 @@ namespace Data
 				Description = book.Description,
 				ISBN = book.ISBN,
 				Series = series,
+				SeriesId=seriesPartId,
 				SeriesPart = seriesPart,
+				SeriesPartId=seriesPartId,
 				PublishingDate = Convert.ToDateTime(book.PublishingDate),
 				ImagePath = book.ImagePath,
 				Readers = readers,

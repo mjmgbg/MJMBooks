@@ -79,6 +79,10 @@
     <Compile Include="Migrations\201508230844406_FixedSeriesColumnNames2.Designer.cs">
       <DependentUpon>201508230844406_FixedSeriesColumnNames2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201508230915398_AddedNullForSeries.cs" />
+    <Compile Include="Migrations\201508230915398_AddedNullForSeries.Designer.cs">
+      <DependentUpon>201508230915398_AddedNullForSeries.cs</DependentUpon>
+    </Compile>
     <Compile Include="SeriesRepository.cs" />
     <Compile Include="BookRepository.cs" />
     <Compile Include="DBContextBook.cs" />
@@ -122,6 +126,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201508230844406_FixedSeriesColumnNames2.resx">
       <DependentUpon>201508230844406_FixedSeriesColumnNames2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508230915398_AddedNullForSeries.resx">
+      <DependentUpon>201508230915398_AddedNullForSeries.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

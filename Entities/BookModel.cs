@@ -23,8 +23,8 @@ namespace Entities
 		 [Display(Name = "ISBN:")]
 		public string ISBN { get; set; }
 		public int LanguageId { get; set; }
-		public int SeriesId { get; set; }
-		public int SeriesPartId { get; set; }
+		public int ?SeriesId { get; set; }
+		public int ?SeriesPartId { get; set; }
 		[UIHint("DateTimePicker")]
 		[Display(Name = "Utgiven:")]
 		public DateTime PublishingDate { get; set; }
