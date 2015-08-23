@@ -59,6 +59,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Migrations\201508230654388_PartNumberInSeries.cs" />
+    <Compile Include="Migrations\201508230654388_PartNumberInSeries.Designer.cs">
+      <DependentUpon>201508230654388_PartNumberInSeries.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201508230701118_SeriesNameIsRequired.cs" />
+    <Compile Include="Migrations\201508230701118_SeriesNameIsRequired.Designer.cs">
+      <DependentUpon>201508230701118_SeriesNameIsRequired.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201508230816160_SeriesPart.cs" />
+    <Compile Include="Migrations\201508230816160_SeriesPart.Designer.cs">
+      <DependentUpon>201508230816160_SeriesPart.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201508230836197_FixedSeriesColumnNames.cs" />
+    <Compile Include="Migrations\201508230836197_FixedSeriesColumnNames.Designer.cs">
+      <DependentUpon>201508230836197_FixedSeriesColumnNames.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201508230844406_FixedSeriesColumnNames2.cs" />
+    <Compile Include="Migrations\201508230844406_FixedSeriesColumnNames2.Designer.cs">
+      <DependentUpon>201508230844406_FixedSeriesColumnNames2.cs</DependentUpon>
+    </Compile>
     <Compile Include="SeriesRepository.cs" />
     <Compile Include="BookRepository.cs" />
     <Compile Include="DBContextBook.cs" />
@@ -87,6 +107,21 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201508210649395_Init.resx">
       <DependentUpon>201508210649395_Init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508230654388_PartNumberInSeries.resx">
+      <DependentUpon>201508230654388_PartNumberInSeries.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508230701118_SeriesNameIsRequired.resx">
+      <DependentUpon>201508230701118_SeriesNameIsRequired.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508230816160_SeriesPart.resx">
+      <DependentUpon>201508230816160_SeriesPart.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508230836197_FixedSeriesColumnNames.resx">
+      <DependentUpon>201508230836197_FixedSeriesColumnNames.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508230844406_FixedSeriesColumnNames2.resx">
+      <DependentUpon>201508230844406_FixedSeriesColumnNames2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

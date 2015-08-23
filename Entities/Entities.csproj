@@ -56,6 +56,7 @@
     <Compile Include="PublisherModel.cs" />
     <Compile Include="ReaderModel.cs" />
     <Compile Include="SeriesModel.cs" />
+    <Compile Include="SeriesPartNumberModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

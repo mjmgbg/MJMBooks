@@ -23,6 +23,8 @@ namespace Entities
 		 [Display(Name = "ISBN:")]
 		public string ISBN { get; set; }
 		public int LanguageId { get; set; }
+		public int SeriesId { get; set; }
+		public int SeriesPartId { get; set; }
 		[UIHint("DateTimePicker")]
 		[Display(Name = "Utgiven:")]
 		public DateTime PublishingDate { get; set; }
@@ -35,6 +37,7 @@ namespace Entities
 		public List<GenreModel> Genres { get; set; }
 		public List<ReaderModel> Readers { get; set; }
 		public SeriesModel Series { get; set; }
+		public SeriesPartNumberModel SeriesPart { get; set; }
 		public string BgColor { get; set; }
 		public string TextColor { get; set; }
 		public string TextColorSecond { get; set; }

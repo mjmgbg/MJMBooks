@@ -19,6 +19,7 @@ namespace Data
 		public virtual DbSet<LanguageModel> Languages { get; set; }
 		public virtual DbSet<PublisherModel> Publishers { get; set; }
 		public virtual DbSet<ReaderModel> Readers { get; set; }
+		public virtual DbSet<SeriesPartNumberModel> SeriesPart { get; set; }
 		public virtual DbSet<SeriesModel> Series { get; set; }
 		public virtual DbSet<AllowOriginModel> Origins { get; set; }
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -32,10 +33,13 @@ namespace Data
 			modelBuilder.Entity<LanguageModel>().ToTable("Languages");
 			modelBuilder.Entity<ReaderModel>().ToTable("Readers");
 			modelBuilder.Entity<SeriesModel>().ToTable("Series");
+			modelBuilder.Entity<SeriesPartNumberModel>().ToTable("SeriesPart");
 			
 			modelBuilder.Entity<BookModel>().Property(b => b.Title).IsRequired();
 			modelBuilder.Entity<BookModel>().Property(b => b.ISBN).IsRequired();
 			modelBuilder.Entity<BookModel>().Property(b => b.Description).IsRequired();
+			
+			modelBuilder.Entity<SeriesModel>().Property(s => s.Name).IsRequired();
 
 			modelBuilder.Entity<BookModel>()
 			.HasMany(b => b.Readers)

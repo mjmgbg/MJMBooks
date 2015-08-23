@@ -1,5 +1,5 @@
-﻿using Entities;
-using Business;
+﻿using Business;
+using Entities;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -7,12 +7,12 @@ using System.Linq;
 
 namespace Data
 {
-	public class BookRepository 
+	public class BookRepository
 	{
 		private DBContextBook context;
 
 		public BookRepository(DbContext dbContext)
-					{
+		{
 			context = dbContext as DBContextBook;
 		}
 
@@ -26,24 +26,26 @@ namespace Data
 				textColor = topFiveColor[1].R.ToString() + "," + topFiveColor[1].G.ToString() + "," + topFiveColor[1].B.ToString();
 				bgColor = topFiveColor[0].R.ToString() + "," + topFiveColor[0].G.ToString() + "," + topFiveColor[0].B.ToString();
 				textColorSecond = topFiveColor[2].R.ToString() + "," + topFiveColor[2].G.ToString() + "," + topFiveColor[2].B.ToString();
-				if (int.Parse(topFiveColor[0].R.ToString())<50)
+				if (int.Parse(topFiveColor[0].R.ToString()) < 50)
 				{
 					textColor = textColorSecond;
 					textColorSecond = bgColor;
 				}
 			}
-			SeriesModel series = new SeriesModel();
-
+			var series = new SeriesModel();
+			var seriesPart = new SeriesPartNumberModel();
 			if (book.SeriesName != string.Empty && book.SeriesName != null)
 			{
 				series = GetSeriesByName(book.SeriesName);
+				seriesPart = GetSeriesPartByNameAndNumber(series.Name, GetSeriesNumberFromString(book.SeriesName));
 			}
 			else
 			{
 				series = null;
+				seriesPart = null;
 			}
 
-			List<ReaderModel> readers = new List<ReaderModel>();
+			var readers = new List<ReaderModel>();
 
 			if (book.ReaderNames != string.Empty && book.ReaderNames != null)
 			{
@@ -60,6 +62,7 @@ namespace Data
 				Description = book.Description,
 				ISBN = book.ISBN,
 				Series = series,
+				SeriesPart = seriesPart,
 				PublishingDate = Convert.ToDateTime(book.PublishingDate),
 				ImagePath = book.ImagePath,
 				Readers = readers,
@@ -76,7 +79,7 @@ namespace Data
 		}
 
 		public bool IsBookInDB(string isbn)
-		{	
+		{
 			var book = context.Books.Where(b => b.ISBN == isbn).FirstOrDefault();
 			if (book != null)
 			{
@@ -95,17 +98,18 @@ namespace Data
 				Description = b.Description,
 				LanguageId = b.LanguageId,
 				PublisherId = b.PublisherId,
-				Series =b.Series,
+				Series = b.Series,
+				SeriesPart = b.SeriesPart,
 				Readers = GetBookReaders(b.Id),
 				Genres = GetBookGenres(b.Id),
 				ISBN = b.ISBN,
 				ImagePath = b.ImagePath,
-				Language =b.Language,
+				Language = b.Language,
 				Publisher = b.Publisher,
 				PublishingDate = b.PublishingDate,
-				BgColor=b.BgColor,
-				TextColor=b.TextColor,
-				TextColorSecond=b.TextColorSecond,
+				BgColor = b.BgColor,
+				TextColor = b.TextColor,
+				TextColorSecond = b.TextColorSecond,
 			}).ToList();
 			return books;
 		}
@@ -119,6 +123,7 @@ namespace Data
 				Authors = GetBookAuthors(b.Id),
 				Readers = GetBookReaders(b.Id),
 				Series = b.Series,
+				SeriesPart = b.SeriesPart,
 				Description = b.Description,
 				Genres = GetBookGenres(b.Id),
 				ISBN = b.ISBN,
@@ -150,9 +155,7 @@ namespace Data
 				Id = c.Id
 			}).ToList();
 
-	
 			return baseList;
-		
 		}
 
 		private List<ReaderModel> GetBookReaders(int id)
@@ -190,17 +193,17 @@ namespace Data
 		}
 
 		private List<GenreModel> GetGenresByName(string genres)
-		{var list = new List<GenreModel>();
-			if (genres!=null)
+		{
+			var list = new List<GenreModel>();
+			if (genres != null)
 			{
-				
 				string[] names = genres.Split(';');
 				foreach (var item in names)
 				{
 					list.Add(GetGenreByName(item));
-				}		
+				}
 			}
-		
+
 			return list;
 		}
 
@@ -227,7 +230,6 @@ namespace Data
 			context.SaveChanges();
 			return newGenre;
 		}
-
 
 		private PublisherModel GetPublisherByName(string name)
 		{
@@ -266,15 +268,61 @@ namespace Data
 			}
 		}
 
+		private string GetSeriesNumberFromString(string name)
+		{	//Split name and part
+			string justNumbersArray = new String(name.Where(Char.IsDigit).ToArray());
+			return string.Join("", justNumbersArray);
+		}
+
 		private SeriesModel AddSeriesToDB(string name)
 		{
-			var newSeries = new SeriesModel
+			var seriesId = 0;
+			string justNumbers = GetSeriesNumberFromString(name);
+			name = name.Replace(justNumbers, "").Trim();
+			var series = context.Series.Where(p => p.Name.ToLower() == name.ToLower()).FirstOrDefault();
+			if (series != null)
 			{
-				Name = name,
-			};
-			context.Series.Add(newSeries);
+				seriesId = series.Id;
+			}
+			else
+			{
+				var newSeries = new SeriesModel
+				{
+					Name = name,
+				};
+				context.Series.Add(newSeries);
+				context.SaveChanges();
+				seriesId = newSeries.Id;
+				series = newSeries;
+			}
+
+			AddSeriesPartToDB(seriesId, justNumbers);
+
+			return series;
+		}
+
+		private SeriesPartNumberModel GetSeriesPartByNameAndNumber(string name, string number)
+		{
+			var seriesId = 0;
+			var partNumber = int.Parse(number);
+			var series = context.Series.Where(p => p.Name.ToLower() == name.ToLower()).FirstOrDefault();
+			if (series != null)
+			{
+				seriesId = series.Id;
+			}
+			var seriesPart = context.SeriesPart.Where(p => p.SeriesId == seriesId && p.PartNumber == partNumber).FirstOrDefault();
+			return seriesPart;
+		}
+
+		private void AddSeriesPartToDB(int seriesId, string number)
+		{
+			var newSeriesPart = new SeriesPartNumberModel
+				  {
+					  SeriesId = seriesId,
+					  PartNumber = int.Parse(number)
+				  };
+			context.SeriesPart.Add(newSeriesPart);
 			context.SaveChanges();
-			return newSeries;
 		}
 
 		private List<AuthorModel> GetAuthorsByNames(string authors)
@@ -328,7 +376,7 @@ namespace Data
 			lName = lName.First().ToString().ToUpper() + lName.Substring(1);
 
 			fName = FixDoubleBarrelledName(fName);
-			lName = FixDoubleBarrelledName(lName); 
+			lName = FixDoubleBarrelledName(lName);
 
 			var newAuthor = new AuthorModel
 			{
@@ -366,8 +414,8 @@ namespace Data
 			fName = fName.First().ToString().ToUpper() + fName.Substring(1);
 			lName = lName.First().ToString().ToUpper() + lName.Substring(1);
 
-			fName = FixDoubleBarrelledName(fName); 
-			lName = FixDoubleBarrelledName(lName); 
+			fName = FixDoubleBarrelledName(fName);
+			lName = FixDoubleBarrelledName(lName);
 			var newReader = new ReaderModel
 			{
 				FirstName = fName,
@@ -384,13 +432,11 @@ namespace Data
 			{
 				string[] temp = name.Split('-');
 				name = temp[0] + "-" + temp[1].First().ToString().ToUpper() + temp[1].Substring(1);
-
 			}
 
 			return name;
 		}
 
-	
 		public void Edit(BookModel book)
 		{
 			var bookToEdit = context.Books.Find(book.Id);
@@ -477,6 +523,5 @@ namespace Data
 		{
 			return context.Books.Where(b => b.Id == id).FirstOrDefault().Genres.ToList();
 		}
-
 	}
 }
