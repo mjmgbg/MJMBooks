@@ -66,7 +66,7 @@ namespace Data
 				Description = book.Description,
 				ISBN = book.ISBN,
 				Series = series,
-				SeriesId=seriesPartId,
+				SeriesId=seriesId,
 				SeriesPart = seriesPart,
 				SeriesPartId=seriesPartId,
 				PublishingDate = Convert.ToDateTime(book.PublishingDate),
@@ -105,7 +105,9 @@ namespace Data
 				LanguageId = b.LanguageId,
 				PublisherId = b.PublisherId,
 				Series = b.Series,
+				SeriesId = b.SeriesId,
 				SeriesPart = b.SeriesPart,
+				SeriesPartId = b.SeriesPartId,
 				Readers = GetBookReaders(b.Id),
 				Genres = GetBookGenres(b.Id),
 				ISBN = b.ISBN,
@@ -129,7 +131,9 @@ namespace Data
 				Authors = GetBookAuthors(b.Id),
 				Readers = GetBookReaders(b.Id),
 				Series = b.Series,
+				SeriesId = b.SeriesId,
 				SeriesPart = b.SeriesPart,
+				SeriesPartId = b.SeriesPartId,
 				Description = b.Description,
 				Genres = GetBookGenres(b.Id),
 				ISBN = b.ISBN,
@@ -173,7 +177,7 @@ namespace Data
 				Id = c.Id
 			}).ToList();
 		}
-
+	
 		private LanguageModel GetLanguageByName(string name)
 		{
 			var language = context.Languages.Where(p => p.Name.ToLower() == name.ToLower()).FirstOrDefault();

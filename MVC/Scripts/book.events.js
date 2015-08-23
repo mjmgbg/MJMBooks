@@ -2,7 +2,9 @@
     initMenu();
     $('#wrapper').addClass('toggled-2');
     $('#wrapper').show();
-    $(".book-container").click(function () {
+    $('body').on('click', '.book-container', function(ev) {
+
+
         var id = $(this).attr('id');
         hideAll(id);
         var rowId = $('#folder-' + id).attr("data-rowId");

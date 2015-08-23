@@ -8,9 +8,18 @@
         @foreach (var item in Model)
         {
             <li>
-                <a href="#">@item.Name</a>
+                @Ajax.ActionLink(linkText: item.Name, actionName: "GetSeries", controllerName: "Home", routeValues: new { id = item.Id },
+                    ajaxOptions: new AjaxOptions
+                    {
+                        UpdateTargetId = "target",
+                        InsertionMode = InsertionMode.Replace,
+                        LoadingElementId = "loaderDiv"
+                    },
+                    htmlAttributes: new { id = "seriesLink" + item.Id })
             </li>
-            
+
+            @*<li><a href="#"><input type="submit" class="menuopt" value="@item.Name" /></a></li>*@
+
         }
     </ul>
 </div>

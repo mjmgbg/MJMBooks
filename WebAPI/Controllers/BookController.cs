@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using WebAPI.Models;
+using System.Web.Http.OData;
 
 namespace WebAPI.Controllers
 {
@@ -21,7 +22,7 @@ namespace WebAPI.Controllers
 			repo = new BookRepository(context);
 		}
 
-		//[EnableQuery()]
+		[EnableQuery()]
 		public IQueryable<BookModel> Get()
 		{
 			return repo.GetAllBooks().AsQueryable();

@@ -21,6 +21,12 @@ namespace MVC.Controllers
 			model.BookList = apiModelBook.GetAllBooksFromDb("api/Book?");
 			return View(model);
 		}
+		public ActionResult GetSeries(int id)
+		{
+			var model = new StartPageViewModel();
+			model.BookList = apiModelBook.GetAllBooksFromDb("api/Book?$filter=SeriesId eq "+id+"&$orderby=SeriesPartId asc");
+			return PartialView("Index",model);
+		}
 
 		public ActionResult About()
 		{

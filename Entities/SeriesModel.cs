@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Entities
 {
-	public class SeriesModel 
+	public class SeriesModel
 	{
 		public int Id { get; set; }
 
 		public string Name { get; set; }
+
 		
 	}
 }
