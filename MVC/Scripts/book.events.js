@@ -1,4 +1,7 @@
-﻿$(function(){
+﻿$(function () {
+    initMenu();
+    $('#wrapper').addClass('toggled-2');
+    $('#wrapper').show();
     $(".book-container").click(function () {
         var id = $(this).attr('id');
         hideAll(id);

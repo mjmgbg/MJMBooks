@@ -139,7 +139,10 @@ namespace MVC.Models
 
 			return null;
 		}
-
+		public List<SeriesModel> GetAllSeriesFromDb(string path)
+		{
+			return GetListInfoFromWebApi(path, "") as List<SeriesModel>;
+		}
 		public List<BookModel> GetAllBooksFromDb(string path)
 		{
 			return GetListInfoFromWebApi(path, "") as List<BookModel>;

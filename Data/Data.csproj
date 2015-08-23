@@ -59,6 +59,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SeriesRepository.cs" />
     <Compile Include="BookRepository.cs" />
     <Compile Include="DBContextBook.cs" />
     <Compile Include="DBContextUser.cs" />

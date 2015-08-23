@@ -18,9 +18,7 @@ namespace MVC.Controllers
 		public ActionResult Index()
 		{
 			var model = new StartPageViewModel();
-			GetApiResponse<BookModel> apiModelBook = new GetApiResponse<BookModel>();
-			model.BookList = apiModelBook.GetAllBooksFromDb("api/DbBook?");
-			
+			model.BookList = apiModelBook.GetAllBooksFromDb("api/Book?");
 			return View(model);
 		}
 

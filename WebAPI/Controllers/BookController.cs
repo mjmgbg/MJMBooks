@@ -10,12 +10,12 @@ using WebAPI.Models;
 namespace WebAPI.Controllers
 {
 	[EnableCors("http://localhost:3603,http://mjmbooks.azurewebsites.net","*","*"  )]
-	public class DbBookController : ApiController
+	public class BookController : ApiController
 	{
 		private BookRepository repo;
 		private DBContextBook context;
 
-		public DbBookController()
+		public BookController()
 		{
 			context = new DBContextBook();
 			repo = new BookRepository(context);

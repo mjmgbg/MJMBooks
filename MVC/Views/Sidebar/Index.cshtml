@@ -1,0 +1,16 @@
+﻿@model IEnumerable<Entities.SeriesModel>
+@{
+
+}
+<div id="sidebar-wrapper">
+    <ul class=" sidebar-nav nav-pills nav-stacked" id="menu">
+
+        @foreach (var item in Model)
+        {
+            <li>
+                <a href="#">@item.Name</a>
+            </li>
+            
+        }
+    </ul>
+</div>

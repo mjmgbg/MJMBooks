@@ -44,7 +44,7 @@ namespace MVC.Controllers
 			}
 			if (ModelState.IsValid)
 			{
-				var savedInDb = await apiModelBook.IsBookInDb("api/DbBook?isbn=", model.Isbn);
+				var savedInDb = await apiModelBook.IsBookInDb("api/Book?isbn=", model.Isbn);
 				model.AlreadyInDb = savedInDb;
 
 				if (model.AlreadyInDb)
@@ -66,7 +66,7 @@ namespace MVC.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				apiModelBook.SaveBookToDb("api/DbBook/", model.Book);
+				apiModelBook.SaveBookToDb("api/Book/", model.Book);
 				return PartialView("_BookSaved");
 			}
 
@@ -77,7 +77,7 @@ namespace MVC.Controllers
 		{
 			if (id > 0)
 			{
-				var book = apiModelBook.GetBookFromDbById("api/APIDbBook/", id);
+				var book = apiModelBook.GetBookFromDbById("api/Book/", id);
 				return View("EditBook", book);
 			}
 			return View("EditBook");
@@ -96,7 +96,7 @@ namespace MVC.Controllers
 		{
 			try
 			{
-				//var book = await apiModelBook.UpdateBook("api/APIDbBook/", id.ToString(), model);
+				//var book = await apiModelBook.UpdateBook("api/Book/", id.ToString(), model);
 				return RedirectToAction("Index");
 			}
 			catch
@@ -107,7 +107,7 @@ namespace MVC.Controllers
 
 		public ActionResult Delete(int id)
 		{
-			var book = apiModelBook.GetBookFromDbById("api/APIDbBook/", id);
+			var book = apiModelBook.GetBookFromDbById("api/Book/", id);
 			return View("DeleteBook", book);
 		}
 
@@ -116,7 +116,7 @@ namespace MVC.Controllers
 		{
 			try
 			{
-				//await apiModelBook.DeleteBook("api/APIDbBook/", id.ToString(), model);
+				//await apiModelBook.DeleteBook("api/Book/", id.ToString(), model);
 				return RedirectToAction("Index");
 			}
 			catch

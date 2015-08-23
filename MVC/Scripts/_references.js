@@ -16,4 +16,5 @@
 /// <reference path="file-upload/jquery.iframe-transport.js" />
 /// <reference path="file-upload/jquery.fileupload-ui.js" />
 /// <reference path="file-upload/jquery.fileupload.js" />
-/// <reference path="app.js" />
+/// <reference path="book.events.js" />
+/// <reference path="sidebar.events.js" />

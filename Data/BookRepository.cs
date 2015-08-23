@@ -54,7 +54,7 @@ namespace Data
 				readers = null;
 			}
 
-			BookModel newDBBook = new BookModel
+			BookModel newBook = new BookModel
 			{
 				Title = book.Title,
 				Description = book.Description,
@@ -71,7 +71,7 @@ namespace Data
 				BgColor = bgColor,
 				TextColorSecond = textColorSecond,
 			};
-			context.Books.Add(newDBBook);
+			context.Books.Add(newBook);
 			context.SaveChanges();
 		}
 
