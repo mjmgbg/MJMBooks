@@ -10,16 +10,32 @@ namespace MVC.Controllers
 {
 	public class SidebarController : Controller
 	{
-		private GetApiResponse<SeriesModel> apiModel;
+		private GetApiResponse<SeriesModel> seriesApiModel;
+		private GetApiResponse<AuthorModel> authorsApiModel;
+		private GetApiResponse<ReaderModel> readersApiModel;
 		public SidebarController()
 		{
-			apiModel = new GetApiResponse<SeriesModel>();
+			seriesApiModel = new GetApiResponse<SeriesModel>();
+			authorsApiModel = new GetApiResponse<AuthorModel>();
+			readersApiModel = new GetApiResponse<ReaderModel>();
 		}
-		public ActionResult Index()
+		public ActionResult Series()
 		{
 			var model = new List<SeriesModel>();
-			model = apiModel.GetAllSeriesFromDb("api/Series?");
-			return PartialView(model);
+			model = seriesApiModel.GetAllSeriesFromDb("api/Series?");
+			return PartialView("_Series",model);
+		}
+		public ActionResult Authors()
+		{
+			var model = new List<AuthorModel>();
+			model = authorsApiModel.GetAllAuthorsFromDb("api/Authors?");
+			return PartialView("_Authors",model);
+		}
+		public ActionResult Readers()
+		{
+			var model = new List<ReaderModel>();
+			model = readersApiModel.GetAllReadersFromDb("api/Readers?");
+			return PartialView("_Readers",model);
 		}
 	}
 }

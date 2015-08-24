@@ -139,10 +139,7 @@ namespace MVC.Models
 
 			return null;
 		}
-		public List<SeriesModel> GetAllSeriesFromDb(string path)
-		{
-			return GetListInfoFromWebApi(path, "") as List<SeriesModel>;
-		}
+		
 		public List<BookModel> GetAllBooksFromDb(string path)
 		{
 			return GetListInfoFromWebApi(path, "") as List<BookModel>;
@@ -187,6 +184,19 @@ namespace MVC.Models
 		{
 			var result = await DeleteInfoFromWebApi(path, id, book);
 			return true;
+		}
+		public List<SeriesModel> GetAllSeriesFromDb(string path)
+		{
+			return GetListInfoFromWebApi(path, "") as List<SeriesModel>;
+		}
+
+		public List<AuthorModel> GetAllAuthorsFromDb(string path)
+		{
+			return GetListInfoFromWebApi(path, "") as List<AuthorModel>;
+		}
+		public List<ReaderModel> GetAllReadersFromDb(string path)
+		{
+			return GetListInfoFromWebApi(path, "") as List<ReaderModel>;
 		}
 	}
 }

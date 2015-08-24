@@ -1,0 +1,25 @@
+﻿@model IEnumerable<Entities.ReaderModel>
+@{
+
+}
+<div id="sidebar-wrapper3" class="sidebar-wrapper">
+    <ul class=" sidebar-nav nav-pills nav-stacked" id="menu3">
+
+        @foreach (var item in Model)
+        {
+            <li>
+                @Ajax.ActionLink(linkText: item.DisplayFullName, actionName: "GetReaders", controllerName: "Home", routeValues: new { id = item.Id },
+                    ajaxOptions: new AjaxOptions
+                    {
+                        UpdateTargetId = "target",
+                        InsertionMode = InsertionMode.Replace,
+                        LoadingElementId = "loaderDiv"
+                    },
+                     htmlAttributes: new { id = "readersLink" + item.Id })
+            </li>
+
+            @*<li><a href="#"><input type="submit" class="menuopt" value="@item.Name" /></a></li>*@
+
+        }
+    </ul>
+</div>

@@ -91,6 +91,8 @@
     <Compile Include="Migrations\201508230915398_AddedNullForSeries.Designer.cs">
       <DependentUpon>201508230915398_AddedNullForSeries.cs</DependentUpon>
     </Compile>
+    <Compile Include="AuthorsRepository.cs" />
+    <Compile Include="ReadersRepository.cs" />
     <Compile Include="SeriesRepository.cs" />
     <Compile Include="BookRepository.cs" />
     <Compile Include="DBContextBook.cs" />

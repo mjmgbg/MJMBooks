@@ -1,21 +1,21 @@
-﻿@model IEnumerable<Entities.SeriesModel>
+﻿@model IEnumerable<Entities.AuthorModel>
 @{
 
 }
-<div id="sidebar-wrapper">
-    <ul class=" sidebar-nav nav-pills nav-stacked" id="menu">
+<div id="sidebar-wrapper2" class="sidebar-wrapper">
+    <ul class=" sidebar-nav nav-pills nav-stacked" id="menu2">
 
         @foreach (var item in Model)
         {
             <li>
-                @Ajax.ActionLink(linkText: item.Name, actionName: "GetSeries", controllerName: "Home", routeValues: new { id = item.Id },
+                @Ajax.ActionLink(linkText: item.DisplayFullName, actionName: "GetAuthors", controllerName: "Home", routeValues: new { id = item.Id },
                     ajaxOptions: new AjaxOptions
                     {
                         UpdateTargetId = "target",
                         InsertionMode = InsertionMode.Replace,
                         LoadingElementId = "loaderDiv"
                     },
-                    htmlAttributes: new { id = "seriesLink" + item.Id })
+                     htmlAttributes: new { id = "authorsLink" + item.Id })
             </li>
 
             @*<li><a href="#"><input type="submit" class="menuopt" value="@item.Name" /></a></li>*@

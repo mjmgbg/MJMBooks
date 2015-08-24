@@ -41,15 +41,18 @@
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li class="active"><button class="navbar-toggle collapse in" data-toggle="collapse" id="menu-toggle-2"> <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span></button></li>
+                <li class="active"><button class="navbar-toggle collapse in" data-toggle="collapse" id="menu-toggle-2">Lista serier</button></li>
+                <li class="active"><button class="navbar-toggle collapse in" data-toggle="collapse" id="menu-toggle-3">Lista författare </button></li>
+                <li class="active"><button class="navbar-toggle collapse in" data-toggle="collapse" id="menu-toggle-4">Lista uppläsare</button></li>
             </ul>
         </div><!-- bs-example-navbar-collapse-1 -->
     </nav>
     <div id="wrapper" class="sidebar-hide">
         <!-- Sidebar -->
      
-    @{Html.RenderAction("Index", "Sidebar");}
-    
+    @{Html.RenderAction("Series", "Sidebar");}
+    @{Html.RenderAction("Authors", "Sidebar");}
+    @{Html.RenderAction("Readers", "Sidebar");}
         <!-- Page Content -->
         <div id="page-content-wrapper">
             <div class="container-fluid">
@@ -59,6 +62,17 @@
         <!-- /#page-content-wrapper -->
     </div>
     <!-- /#wrapper -->
+
+
+    <div id="footer" class="container">
+        <nav class="navbar navbar-default navbar-fixed-bottom">
+            <div class="navbar-inner navbar-content-center">
+
+                <p class="text-muted credit">Example courtesy <a href="http://martinbean.co.uk">Martin Bean</a> and <a href="http://ryanfait.com/sticky-footer/">Ryan Fait</a>.</p>
+            </div>
+        </nav>
+    </div>
+
 
 
     @Scripts.Render("~/bundles/jquery")
