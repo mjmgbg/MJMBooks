@@ -5,8 +5,9 @@ using System.Configuration;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using System.Web.OData;
 using WebAPI.Models;
-using System.Web.Http.OData;
+
 
 namespace WebAPI.Controllers
 {

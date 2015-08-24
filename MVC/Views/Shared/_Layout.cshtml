@@ -7,29 +7,8 @@
     <title>@ConfigurationManager.AppSettings["appName"]</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-
 </head>
 <body>
-    @*<div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    @Html.ActionLink(ConfigurationManager.AppSettings["appName"], "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-                </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                        <li>@Html.ActionLink("About", "About", "Home")</li>
-                        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                    </ul>
-                    @Html.Partial("_LoginPartial")
-                </div>
-            </div>
-        </div>*@
     <nav class="navbar navbar-default navbar-fixed-top no-margin">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header fixed-brand">
@@ -45,14 +24,28 @@
                 <li class="active"><button class="navbar-toggle collapse in" data-toggle="collapse" id="menu-toggle-3">Lista författare </button></li>
                 <li class="active"><button class="navbar-toggle collapse in" data-toggle="collapse" id="menu-toggle-4">Lista uppläsare</button></li>
             </ul>
+
+            <div class="pull-right">
+                @using (Ajax.BeginForm(actionName: "Search", controllerName: "Home", routeValues: null,
+                ajaxOptions: new AjaxOptions { UpdateTargetId = "target", HttpMethod = "POST" },
+                htmlAttributes: new { @class = "navbar-form", role = "search", id = "NAME" }))
+                {  
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Sök författre eller titel" name="search" id="search">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+
+                }
+            </div>
         </div><!-- bs-example-navbar-collapse-1 -->
     </nav>
     <div id="wrapper" class="sidebar-hide">
         <!-- Sidebar -->
-     
-    @{Html.RenderAction("Series", "Sidebar");}
-    @{Html.RenderAction("Authors", "Sidebar");}
-    @{Html.RenderAction("Readers", "Sidebar");}
+        @{Html.RenderAction("Series", "Sidebar");}
+        @{Html.RenderAction("Authors", "Sidebar");}
+        @{Html.RenderAction("Readers", "Sidebar");}
         <!-- Page Content -->
         <div id="page-content-wrapper">
             <div class="container-fluid">
@@ -63,7 +56,6 @@
     </div>
     <!-- /#wrapper -->
 
-
     <div id="footer" class="container">
         <nav class="navbar navbar-default navbar-fixed-bottom">
             <div class="navbar-inner navbar-content-center">
@@ -72,8 +64,6 @@
             </div>
         </nav>
     </div>
-
-
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryval")
