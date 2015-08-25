@@ -271,6 +271,8 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="ConnectionStrings.config" />
+    <Content Include="PrivateSettings.config" />
     <None Include="Properties\PublishProfiles\MJMBooks.pubxml" />
     <None Include="Properties\PublishProfiles\MJMBooks__stage.pubxml" />
     <Content Include="Scripts\file-upload\jquery.fileupload-ui.js" />

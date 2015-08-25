@@ -10,6 +10,7 @@ namespace MVC.Models
 		public bool NoSearchResultFound { get; set; }
 
 		public bool ErrorInSearchResult { get; set; }
+		public int TotalCount { get; set; }
 
 		public StartPageViewModel()
 		{

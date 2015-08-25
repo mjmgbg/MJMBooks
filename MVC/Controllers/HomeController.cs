@@ -11,6 +11,7 @@ namespace MVC.Controllers
 	public class HomeController : Controller
 	{
 		private GetApiResponse<BookModel> apiModelBook;
+		
 		public HomeController()
 		{
 			apiModelBook = new GetApiResponse<BookModel>();
@@ -19,25 +20,33 @@ namespace MVC.Controllers
 		{
 			var model = new StartPageViewModel();
 			model.BookList = apiModelBook.GetAllBooksFromDb("api/Book?");
+			model.TotalCount = model.BookList.Count();
+			ViewBag.TotalCount = model.BookList.Count();
 			return View(model);
 		}
 		public ActionResult GetSeries(int id)
 		{
 			var model = new StartPageViewModel();
-			model.BookList = apiModelBook.GetAllBooksFromDb("api/Book?$filter=SeriesId eq "+id+"&$orderby=SeriesPartId asc");
+			model.BookList = apiModelBook.GetAllBooksFromDb("api/Book?$filter=SeriesId eq " + id + "&$orderby=SeriesPartId asc");
+			model.TotalCount = model.BookList.Count();
+			ViewBag.TotalCount = model.BookList.Count();
 			return PartialView("Index",model);
 		}
 		public ActionResult GetAuthors(int id)
 		{
 			var model = new StartPageViewModel();
-			model.BookList = apiModelBook.GetAllBooksFromDb("api/Book?");
+			model.BookList = apiModelBook.GetAllBooksFromDb("api/Book?$filter=Authors/any(a: a/Id eq " + id + ")&$orderby=Title asc");
+			model.TotalCount = model.BookList.Count();
+			ViewBag.TotalCount = model.BookList.Count();
 			return PartialView("Index", model);
 		}
 
 		public ActionResult GetReaders(int id)
 		{
 			var model = new StartPageViewModel();
-			model.BookList = apiModelBook.GetAllBooksFromDb("api/Book?");
+			model.BookList = apiModelBook.GetAllBooksFromDb("api/Book?$filter=Readers/any(r: r/Id eq " + id + ")&$orderby=Title asc");
+			model.TotalCount = model.BookList.Count();
+			ViewBag.TotalCount = model.BookList.Count();
 			return PartialView("Index", model);
 		}
 		public ActionResult About()

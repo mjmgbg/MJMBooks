@@ -5,7 +5,7 @@ using WebAPI.Models;
 
 namespace WebAPI.Controllers
 {
-	[EnableCors("http://localhost:3603,http://mjmbooks.azurewebsites.net", "*", "*")]
+	[EnableCors("http://localhost:3603,http://mjmbooks.azurewebsites.net,http://books.maaninka.nu", "*", "*")]
 	public class AdlibrisController : ApiController
 	{
 		public void Get()

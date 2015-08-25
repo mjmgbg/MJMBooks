@@ -4,7 +4,12 @@
     ViewBag.Title = "Ljudböcker";
     var i = 0;
     var rowNr = 0;
-    var left = Model.BookList.Count() % 4;
+
+    var left = 0;
+    if ( Model.BookList!=null)
+    {
+        left =Model.BookList.Count() % 4;    
+    }
     
 }
 <div id="target">
@@ -18,6 +23,10 @@
                 else if (Model.NoSearchResultFound)
                 {
                     <span>Inget sökresultat hittades</span>
+                }
+                else if (Model.BookList==null)
+                {
+                    <span>Hittade inga böcker.</span>
                 }
                 else
                 {
@@ -72,6 +81,16 @@
                 }
             </div>
         </section>
+    <div id="footer" class="container">
+        <nav class="navbar navbar-default navbar-fixed-bottom">
+            <div class="navbar-inner navbar-content-center">
+                <div class="row">
+                    <div class="col-md-2 col-md-offset-5">Antal böcker: @ViewBag.totalcount</div>
+                </div>
+
+            </div>
+        </nav>
+    </div>
 
     </div>
 </div>

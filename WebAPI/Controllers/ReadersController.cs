@@ -10,7 +10,7 @@ using System.Web.Http.Cors;
 
 namespace WebAPI.Controllers
 {
-	[EnableCors("http://localhost:3603,http://mjmbooks.azurewebsites.net", "*", "*")]
+	[EnableCors("http://localhost:3603,http://mjmbooks.azurewebsites.net,http://books.maaninka.nu", "*", "*")]
 	public class ReadersController : ApiController
 	{
 		private ReadersRepository repo;
