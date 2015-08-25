@@ -189,7 +189,7 @@ _Pvt_Extensions/
 ModelManifest.xml
 
 # Config files
-ConnectionStrings.config
-PrivateSettings.config
+*ConnectionStrings.config
+*PrivateSettings.config
 MJMBooks.sln.GhostDoc.xml
 *.pubxml
