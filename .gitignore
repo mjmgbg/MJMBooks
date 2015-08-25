@@ -191,3 +191,5 @@ ModelManifest.xml
 # Config files
 ConnectionStrings.config
 PrivateSettings.config
+MJMBooks.sln.GhostDoc.xml
+*.pubxml
