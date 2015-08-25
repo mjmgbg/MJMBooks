@@ -260,8 +260,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
-    <Content Include="PrivateSettings.config" />
-    <Content Include="ConnectionStrings.config" />
     <None Include="Properties\PublishProfiles\MJMBooks-api.pubxml" />
     <None Include="Properties\PublishProfiles\MJMBooks-api__stage.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
