@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 namespace MVC.Controllers
 {
+	 [Authorize]
 	public class AdminController : Controller
 	{
 		private GetApiResponse<BookDetailDTO> apiModelAdLibris;

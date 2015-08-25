@@ -21,9 +21,50 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li>
+                        @Ajax.ActionLink(linkText: "Böcker",
+            actionName: "Index", controllerName: "Book", routeValues: null,
+            ajaxOptions: new AjaxOptions
+            {
+                UpdateTargetId = "target",
+                InsertionMode = InsertionMode.Replace,
+                LoadingElementId = "loaderDiv"
+            },
+            htmlAttributes: new { id = "BookAction" })
+                    </li>
+                    <li>
+                        @Ajax.ActionLink(linkText: "Författare",
+            actionName: "Index", controllerName: "Author", routeValues: null,
+            ajaxOptions: new AjaxOptions
+            {
+                UpdateTargetId = "target",
+                InsertionMode = InsertionMode.Replace,
+                LoadingElementId = "loaderDiv"
+            },
+            htmlAttributes: new { id = "AuthorAction" })
+                    </li>
+                    <li>
+                        @Ajax.ActionLink(linkText: "Uppläsare",
+            actionName: "Index", controllerName: "Reader", routeValues: null,
+            ajaxOptions: new AjaxOptions
+            {
+                UpdateTargetId = "target",
+                InsertionMode = InsertionMode.Replace,
+                LoadingElementId = "loaderDiv"
+            },
+            htmlAttributes: new { id = "ReaderAction" })
+                    </li>
+                    <li>
+                        @Ajax.ActionLink(linkText: "Serier",
+            actionName: "Index", controllerName: "Series", routeValues: null,
+            ajaxOptions: new AjaxOptions
+            {
+                UpdateTargetId = "target",
+                InsertionMode = InsertionMode.Replace,
+                LoadingElementId = "loaderDiv"
+            },
+            htmlAttributes: new { id = "SeriesAction" })
+                    </li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
