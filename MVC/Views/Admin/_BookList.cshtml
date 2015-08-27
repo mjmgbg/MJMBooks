@@ -1,0 +1,81 @@
+﻿@model IEnumerable<Entities.BookModel>
+<div class="spacer"></div>
+<p>
+
+    @Ajax.ActionLink(linkText: "Lägg till bok",
+            actionName: "Add", controllerName: "Admin", routeValues: null,
+            ajaxOptions: new AjaxOptions
+            {
+                UpdateTargetId = "target",
+                InsertionMode = InsertionMode.Replace,
+                LoadingElementId = "loaderDiv"
+            },
+            htmlAttributes: new { id = "AddBook" })
+
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Authors)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ISBN)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Readers)
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        var authorsNames = item.GetAuthors(item);
+        var readersNames = item.GetReaders(item);
+
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => authorsNames)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ISBN)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => readersNames)
+            </td>
+            <td>
+
+                @Ajax.ActionLink(linkText: "Ändra",
+            actionName: "EditBook", controllerName: "Admin", routeValues: new { id = item.Id },
+            ajaxOptions: new AjaxOptions
+            {
+                UpdateTargetId = "target",
+                InsertionMode = InsertionMode.Replace,
+                LoadingElementId = "loaderDiv"
+            },
+            htmlAttributes: new { id = "EditBook" })
+
+                |
+
+                @Ajax.ActionLink(linkText: "Radera",
+            actionName: "DeleteBook", controllerName: "Admin", routeValues: new { id = item.Id },
+            ajaxOptions: new AjaxOptions
+            {
+                UpdateTargetId = "target",
+                InsertionMode = InsertionMode.Replace,
+                LoadingElementId = "loaderDiv"
+            },
+            htmlAttributes: new { id = "DeleteBook" })
+
+
+            </td>
+        </tr>
+    }
+
+</table>

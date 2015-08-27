@@ -23,7 +23,7 @@
                 <ul class="nav navbar-nav">
                     <li>
                         @Ajax.ActionLink(linkText: "Böcker",
-            actionName: "Index", controllerName: "Book", routeValues: null,
+                     actionName: "BookList", controllerName: "Admin", routeValues: null,
             ajaxOptions: new AjaxOptions
             {
                 UpdateTargetId = "target",
@@ -34,7 +34,7 @@
                     </li>
                     <li>
                         @Ajax.ActionLink(linkText: "Författare",
-            actionName: "Index", controllerName: "Author", routeValues: null,
+                     actionName: "AuthorList", controllerName: "Admin", routeValues: null,
             ajaxOptions: new AjaxOptions
             {
                 UpdateTargetId = "target",
@@ -45,7 +45,7 @@
                     </li>
                     <li>
                         @Ajax.ActionLink(linkText: "Uppläsare",
-            actionName: "Index", controllerName: "Reader", routeValues: null,
+                     actionName: "ReaderList", controllerName: "Admin", routeValues: null,
             ajaxOptions: new AjaxOptions
             {
                 UpdateTargetId = "target",
@@ -61,7 +61,8 @@
             {
                 UpdateTargetId = "target",
                 InsertionMode = InsertionMode.Replace,
-                LoadingElementId = "loaderDiv"
+                LoadingElementId = "loaderDiv",
+                OnFailure="",
             },
             htmlAttributes: new { id = "SeriesAction" })
                     </li>

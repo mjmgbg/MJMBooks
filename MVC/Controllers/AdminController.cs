@@ -1,6 +1,7 @@
 ﻿using Entities;
 using MVC.Models;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -11,7 +12,7 @@ using System.Web.Mvc;
 
 namespace MVC.Controllers
 {
-	 [Authorize]
+	[Authorize]
 	public class AdminController : Controller
 	{
 		private GetApiResponse<BookDetailDTO> apiModelAdLibris;
@@ -28,6 +29,12 @@ namespace MVC.Controllers
 		public ActionResult Index()
 		{
 			return View();
+		}
+		public ActionResult BookList()
+		{
+			var model = new List<BookModel>();
+			model = apiModelBook.GetAllBooksFromDb("api/Book?");
+			return PartialView("_BookList", model);
 		}
 
 		public ActionResult Add()
@@ -74,30 +81,22 @@ namespace MVC.Controllers
 			return PartialView("_BookInfo", model);
 		}
 
-		public ActionResult Edit(int id)
+		public ActionResult EditBook(int id)
 		{
 			if (id > 0)
 			{
 				var book = apiModelBook.GetBookFromDbById("api/Book/", id);
-				return View("EditBook", book);
+				return PartialView("_EditBook", book);
 			}
-			return View("EditBook");
-		}
-
-
-		public ActionResult EditBookList()
-		{
-			return null;
-
-			//return View("ListBooks", CacheHelper.GetAllBooks("0", "0"));
+			return PartialView("_EditBook");
 		}
 
 		[HttpPost]
-		public async Task<ActionResult> Edit(int id, BookModel model)
+		public async Task<ActionResult> EditBook(int id, BookModel model)
 		{
 			try
 			{
-				//var book = await apiModelBook.UpdateBook("api/Book/", id.ToString(), model);
+				var book = await apiModelBook.UpdateBook("api/Book/", id.ToString(), model);
 				return RedirectToAction("Index");
 			}
 			catch
@@ -106,18 +105,18 @@ namespace MVC.Controllers
 			}
 		}
 
-		public ActionResult Delete(int id)
+		public ActionResult DeleteBook(int id)
 		{
 			var book = apiModelBook.GetBookFromDbById("api/Book/", id);
-			return View("DeleteBook", book);
+			return PartialView("_DeleteBook", book);
 		}
 
 		[HttpPost]
-		public async Task<ActionResult> Delete(int id, BookModel model)
+		public async Task<ActionResult> DeleteBook(int id, BookModel model)
 		{
 			try
 			{
-				//await apiModelBook.DeleteBook("api/Book/", id.ToString(), model);
+				await apiModelBook.DeleteBook("api/Book/", id.ToString(), model);
 				return RedirectToAction("Index");
 			}
 			catch

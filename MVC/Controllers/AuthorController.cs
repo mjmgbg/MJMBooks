@@ -20,7 +20,7 @@ namespace MVC.Controllers
 		public ActionResult Index()
 		{
 			var model = new List<AuthorModel>();
-			model = apiModelBook.GetAllBooksFromDb("api/Author?");
+			model = apiModelBook.GetAllAuthorsFromDb("api/Author?");
 			return PartialView(model);
 		}
 	}

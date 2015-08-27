@@ -8,6 +8,7 @@
     var left = 0;
     if ( Model.BookList!=null)
     {
+        
         left =Model.BookList.Count() % 4;    
     }
     
@@ -42,11 +43,11 @@
                             rowNr++;
                         }
                         <div id="@item.Id" class="book-container col-md-3">
-                            <img src="https://mjmstorage.blob.core.windows.net/bookcovers/@item.ImagePath" />
+                            <img src="@System.Configuration.ConfigurationManager.AppSettings["imgeBaseUri"]@item.ImagePath" />
                           
                             <div class="text-center">
                                 <div class="title-name">@item.Title</div>
-                                <div class="author-name">@Model.GetAuthors(item)</div>
+                                <div class="author-name">@item.GetAuthors(item)</div>
                             </div>
                            
                         </div>
@@ -54,9 +55,9 @@
         <div class="jaf-container">
             <div>
                 <div class="art-wrap" style="box-shadow: 12px 15px 20px rgb(@item.BgColor) inset, -1px -1px 150px rgb(@item.BgColor) inset;">
-                    <img src="https://mjmstorage.blob.core.windows.net/bookcovers/@item.ImagePath"/>
+                    <img src="@System.Configuration.ConfigurationManager.AppSettings["imgeBaseUri"]@item.ImagePath" />
                 </div>
-                <div class="" style="color: rgb(@item.TextColor);">@Model.GetAuthors(item)</div>
+                <div class="" style="color: rgb(@item.TextColor);">@item.GetAuthors(item)</div>
                 <div class="" style="color: rgb(@item.TextColor);">@item.Title</div>
                 <h3 class="secondaryColor" style="color: rgb(@item.TextColor);">@item.PublishingDate </h3>
                 <div class="multi">

@@ -9,19 +9,7 @@
         <li>
             @Html.ActionLink("Hej " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
         </li>
-        <li>
-            @Ajax.ActionLink(linkText: "Lägg till bok",
-            actionName: "Add", controllerName: "Admin", routeValues: null,
-            ajaxOptions: new AjaxOptions
-            {                
-                UpdateTargetId = "target",
-                InsertionMode = InsertionMode.Replace,
-                LoadingElementId = "loaderDiv" 
-            },
-            htmlAttributes: new { id = "AddBook" })
-
-        </li>
-       >
+     
         <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
     </ul>
     }

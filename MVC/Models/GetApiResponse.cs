@@ -175,12 +175,12 @@ namespace MVC.Models
 			return contents;
 		}
 
-		public async Task<BookViewModel> UpdateBook(string path, string id, BookViewModel book)
+		public async Task<BookViewModel> UpdateBook(string path, string id, BookModel book)
 		{
 			return await UpdateInfoFromWebApi(path, id, book) as BookViewModel;
 		}
 
-		public async Task<bool> DeleteBook(string path, string id, BookViewModel book)
+		public async Task<bool> DeleteBook(string path, string id, BookModel book)
 		{
 			var result = await DeleteInfoFromWebApi(path, id, book);
 			return true;

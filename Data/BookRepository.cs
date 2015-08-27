@@ -79,6 +79,10 @@ namespace Data
 				TextColor = textColor,
 				BgColor = bgColor,
 				TextColorSecond = textColorSecond,
+				IsRead=book.IsRead,
+				CreateDate=DateTime.Now,
+				UpdateDate=DateTime.Now,
+			
 			};
 			context.Books.Add(newBook);
 			context.SaveChanges();
@@ -118,6 +122,9 @@ namespace Data
 				BgColor = b.BgColor,
 				TextColor = b.TextColor,
 				TextColorSecond = b.TextColorSecond,
+				IsRead=b.IsRead,
+				CreateDate=b.CreateDate,
+				UpdateDate=b.UpdateDate,
 			}).ToList();
 			return books;
 		}
@@ -481,6 +488,8 @@ namespace Data
 			book.ImagePath = oldBook.ImagePath;
 			book.ISBN = oldBook.ISBN;
 			book.PublishingDate = oldBook.PublishingDate;
+			book.IsRead=oldBook.IsRead;
+			book.UpdateDate = oldBook.UpdateDate;
 			return book;
 		}
 
