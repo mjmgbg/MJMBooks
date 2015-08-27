@@ -131,7 +131,7 @@ namespace Data
 
 		public BookModel GetBookById(int id)
 		{
-			var book = context.Books.AsEnumerable().Where(b => b.Id == id).Select(b => new BookModel
+			var book = context.Books.Where(b => b.Id == id).AsEnumerable().Select(b => new BookModel
 			{
 				Title = b.Title,
 				Id = b.Id,
@@ -407,7 +407,7 @@ namespace Data
 
 		private ICollection<ReaderModel> GetReadersByName(string readers)
 		{
-			//TODO: Handle more then one reader
+		
 			string[] names = readers.Split(' ');
 			string fName = string.Empty;
 			string lName = names[names.Count() - 1].ToLower();

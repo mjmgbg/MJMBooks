@@ -1,0 +1,70 @@
+﻿@model IEnumerable<Entities.ReaderModel>
+
+<div class="spacer"></div>
+<p>
+
+    @Ajax.ActionLink(linkText: "Lägg till uppläsare",
+            actionName: "AddReader", controllerName: "Admin", routeValues: null,
+            ajaxOptions: new AjaxOptions
+            {
+                UpdateTargetId = "target",
+                InsertionMode = InsertionMode.Replace,
+                LoadingElementId = "loaderDiv",
+                OnFailure = "showXHRError"
+            },
+            htmlAttributes: new { id = "AddReader" })
+
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastName)
+        </th>
+       
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastName)
+        </td>
+       
+        <td>
+            @Ajax.ActionLink(linkText: "Ändra",
+            actionName: "EditReader", controllerName: "Admin", routeValues: new { id = item.Id },
+            ajaxOptions: new AjaxOptions
+            {
+                UpdateTargetId = "target",
+                InsertionMode = InsertionMode.Replace,
+                LoadingElementId = "loaderDiv",
+                OnFailure = "showXHRError"
+            },
+            htmlAttributes: new { id = "EditReader" })
+
+            |
+
+            @Ajax.ActionLink(linkText: "Radera",
+            actionName: "DeleteReader", controllerName: "Admin", routeValues: new { id = item.Id },
+            ajaxOptions: new AjaxOptions
+            {
+                UpdateTargetId = "target",
+                InsertionMode = InsertionMode.Replace,
+                LoadingElementId = "loaderDiv",
+                OnFailure = "showXHRError"
+            },
+            htmlAttributes: new { id = "DeleteReader" })
+
+
+
+        </td>
+    </tr>
+}
+
+</table>

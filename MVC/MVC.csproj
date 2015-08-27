@@ -369,6 +369,20 @@
     <Content Include="Views\Sidebar\_Readers.cshtml" />
     <Content Include="Views\Admin\_BookList.cshtml" />
     <Content Include="Views\Admin\_EditBook.cshtml" />
+    <Content Include="Views\Admin\_SerieList.cshtml" />
+    <Content Include="Views\Admin\_AddSerie.cshtml" />
+    <Content Include="Views\Admin\_EditSerie.cshtml" />
+    <Content Include="Views\Admin\_DeleteSerie.cshtml" />
+    <Content Include="Views\Admin\_AddReader.cshtml" />
+    <Content Include="Views\Admin\_AddAuthor.cshtml" />
+    <Content Include="Views\Admin\_AuthorList.cshtml" />
+    <Content Include="Views\Admin\_ReaderList.cshtml" />
+    <Content Include="Views\Admin\_Saved.cshtml" />
+    <Content Include="Views\Admin\_EditReader.cshtml" />
+    <Content Include="Views\Admin\_EditAuthor.cshtml" />
+    <Content Include="Views\Admin\_DeleteReader.cshtml" />
+    <Content Include="Views\Admin\_DeleteAuthor.cshtml" />
+    <Content Include="Views\Admin\_Error.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

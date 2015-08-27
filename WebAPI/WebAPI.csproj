@@ -214,9 +214,9 @@
     <Compile Include="Controllers\BookController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PhotoController.cs" />
-    <Compile Include="Controllers\AuthorsController.cs" />
-    <Compile Include="Controllers\ReadersController.cs" />
-    <Compile Include="Controllers\SeriesController.cs" />
+    <Compile Include="Controllers\AuthorController.cs" />
+    <Compile Include="Controllers\ReaderController.cs" />
+    <Compile Include="Controllers\SerieController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

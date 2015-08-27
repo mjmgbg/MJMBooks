@@ -22,19 +22,19 @@ namespace MVC.Controllers
 		public ActionResult Series()
 		{
 			var model = new List<SeriesModel>();
-			model = seriesApiModel.GetAllSeriesFromDb("api/Series?");
+			model = seriesApiModel.GetAllSeriesFromDb("api/Serie?");
 			return PartialView("_Series",model);
 		}
 		public ActionResult Authors()
 		{
 			var model = new List<AuthorModel>();
-			model = authorsApiModel.GetAllAuthorsFromDb("api/Authors?");
+			model = authorsApiModel.GetAllAuthorsFromDb("api/Author?");
 			return PartialView("_Authors",model);
 		}
 		public ActionResult Readers()
 		{
 			var model = new List<ReaderModel>();
-			model = readersApiModel.GetAllReadersFromDb("api/Readers?");
+			model = readersApiModel.GetAllReadersFromDb("api/Reader?");
 			return PartialView("_Readers",model);
 		}
 	}

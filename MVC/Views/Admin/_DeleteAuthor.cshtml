@@ -1,0 +1,46 @@
+﻿@model Entities.AuthorModel
+
+<h3>Är du säker på att du vill radera författaren?</h3>
+<div>
+    <h4>Radera författare</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+
+    </dl>
+
+@using (Ajax.BeginForm(actionName: "DeleteAuthor", controllerName: "Admin", routeValues: null,
+    ajaxOptions: new AjaxOptions { UpdateTargetId = "target", HttpMethod = "POST" },
+    htmlAttributes: new { role = "form", id = "frmDeleteAuthor" }))
+{
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Radera" class="btn btn-default" /> |
+            @Ajax.ActionLink(linkText: "Tillbaka",
+            actionName: "AuthorList", controllerName: "Admin", routeValues: null,
+            ajaxOptions: new AjaxOptions
+            {
+                UpdateTargetId = "target",
+                InsertionMode = InsertionMode.Replace,
+                LoadingElementId = "loaderDiv",
+                OnFailure = "showXHRError"
+            },
+            htmlAttributes: new { id = "Back" })
+        </div>
+    }
+</div>

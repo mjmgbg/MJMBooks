@@ -122,5 +122,14 @@
 }
 
 <div>
-    @Html.ActionLink("Tillbaka", "Index")
+    @Ajax.ActionLink(linkText: "Tillbaka",
+            actionName: "Index", controllerName: "Admin", routeValues: null,
+            ajaxOptions: new AjaxOptions
+            {
+                UpdateTargetId = "target",
+                InsertionMode = InsertionMode.Replace,
+                LoadingElementId = "loaderDiv",
+                OnFailure = "showXHRError"
+            },
+            htmlAttributes: new { id = "Back" })
 </div>

@@ -1,0 +1,38 @@
+﻿@model Entities.SeriesModel
+
+<h3>Är du säker på att du vill radera serien?</h3>
+<div>
+    <h4>Radera serie</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+    </dl>
+@using (Ajax.BeginForm(actionName: "DeleteSerie", controllerName: "Admin", routeValues: null,
+    ajaxOptions: new AjaxOptions { UpdateTargetId = "target", HttpMethod = "POST" },
+    htmlAttributes: new { role = "form", id = "frmDeleteSerie" }))
+
+  {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Radera" class="btn btn-default" /> |
+            @Ajax.ActionLink(linkText: "Tillbaka",
+            actionName: "SerieList", controllerName: "Admin", routeValues: null,
+            ajaxOptions: new AjaxOptions
+            {
+                UpdateTargetId = "target",
+                InsertionMode = InsertionMode.Replace,
+                LoadingElementId = "loaderDiv",
+                OnFailure = "showXHRError"
+            },
+            htmlAttributes: new { id = "Back" })
+        </div>
+    }
+</div>

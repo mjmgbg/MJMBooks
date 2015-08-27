@@ -14,10 +14,6 @@ namespace MVC.Models
 
 		public BookDetailDTO BookForAdLibris { get; set; }
 
-		public BookModel Book { get; set; }
-
-		public List<BookViewModel> Books { get; set; }
-
 		public BookDetailDTO GetBookFromAdlibris(string isbn, string path)
 		{
 			BookForAdLibris = GetInfoFromWebApi(path, isbn) as BookDetailDTO;
@@ -72,7 +68,7 @@ namespace MVC.Models
 			return null;
 		}
 
-		private async Task<T> DeleteInfoFromWebApi<U>(string path, string id, U model)
+		private async Task<bool> DeleteInfoFromWebApi<U>(string path, string id, U model)
 		{
 			var httpClient = new System.Net.Http.HttpClient
 			{
@@ -83,15 +79,15 @@ namespace MVC.Models
 			try
 			{
 				var response = await httpClient.DeleteAsync("");
-				return response.Content.ReadAsAsync<T>().Result;
+				return true;
 			}
 			catch (Exception ex)
 			{
 			}
-			return null;
+			return false;
 		}
 
-		private Uri SaveInfoToWebApi<U>(string path, U model)
+		private async Task<bool> SaveInfoToWebApi<U>(string path, U model)
 		{
 			var httpClient = new System.Net.Http.HttpClient
 			{
@@ -101,19 +97,20 @@ namespace MVC.Models
 
 			try
 			{
-				var response = httpClient.PostAsXmlAsync("", model).Result;
+				var response = await httpClient.PostAsXmlAsync("", model);
 				response.EnsureSuccessStatusCode();
 				if (response.IsSuccessStatusCode)
 				{
-					// Get the URI of the created resource.
-					return response.Headers.Location;
+					return true;
+					
 				}
 			}
+				
 			catch (Exception ex)
 			{
 			}
 
-			return null;
+			return false;
 		}
 
 		private List<T> GetListInfoFromWebApi(string path, string isbn)
@@ -147,13 +144,12 @@ namespace MVC.Models
 
 		public BookModel GetBookFromDbById(string path, int id)
 		{
-			Book = GetInfoFromWebApi(path, id.ToString()) as BookModel;
-			return Book;
+			return GetInfoFromWebApi(path, id.ToString()) as BookModel;			
 		}
 
-		public void SaveBookToDb(string path, BookDetailDTO model)
+		public async Task<bool> SaveBookToDb(string path, BookDetailDTO model)
 		{
-			SaveInfoToWebApi(path, model);
+			return await SaveInfoToWebApi(path, model);
 		}
 
 		public async Task<bool> IsBookInDb(string path, string id)
@@ -182,8 +178,8 @@ namespace MVC.Models
 
 		public async Task<bool> DeleteBook(string path, string id, BookModel book)
 		{
-			var result = await DeleteInfoFromWebApi(path, id, book);
-			return true;
+			return await DeleteInfoFromWebApi(path, id, book);
+			
 		}
 		public List<SeriesModel> GetAllSeriesFromDb(string path)
 		{
@@ -198,5 +194,65 @@ namespace MVC.Models
 		{
 			return GetListInfoFromWebApi(path, "") as List<ReaderModel>;
 		}
+
+		public async Task<bool> SaveSerieToDb(string path, SeriesModel model)
+		{
+			return await SaveInfoToWebApi(path, model);
+		}
+
+		public async Task<SeriesModel> UpdateSerie(string path, string id, SeriesModel model)
+		{
+			return await UpdateInfoFromWebApi(path, id, model) as SeriesModel;
+		}
+
+		public SeriesModel GetSerieFromDbById(string path, int id)
+		{
+			return GetInfoFromWebApi(path, id.ToString()) as SeriesModel;
+		}
+
+		public async Task<bool> DeleteSerie(string path, string id, SeriesModel serie)
+		{
+			return await DeleteInfoFromWebApi(path, id, serie);
+		}
+
+		public async Task<bool> SaveReaderToDb(string path, ReaderModel model)
+		{
+			return await SaveInfoToWebApi(path, model);
+		}
+
+		public ReaderModel GetReaderFromDbById(string path, int id)
+		{
+			return GetInfoFromWebApi(path, id.ToString()) as ReaderModel;
+		}
+
+		public async Task<ReaderModel> UpdateReader(string path, string id, ReaderModel model)
+		{
+			return await UpdateInfoFromWebApi(path, id, model) as ReaderModel;
+		}
+		public async Task<bool> DeleteReader(string path, string id, ReaderModel reader)
+		{
+			return await DeleteInfoFromWebApi(path, id, reader);
+		}
+
+		public async Task<bool> SaveAuthorToDb(string path, AuthorModel model)
+		{
+			return await SaveInfoToWebApi(path, model);
+		}
+		
+		public AuthorModel GetAuthorFromDbById(string path, int id)
+		{
+			return GetInfoFromWebApi(path, id.ToString()) as AuthorModel;
+		}
+
+		public async Task<AuthorModel> UpdateAuthor(string path, string id, AuthorModel model)
+		{
+			return await UpdateInfoFromWebApi(path, id, model) as AuthorModel;
+		}
+		public async Task<bool> DeleteAuthor(string path, string id, AuthorModel model)
+		{
+			return await DeleteInfoFromWebApi(path, id, model);
+		}
+
+		
 	}
 }
