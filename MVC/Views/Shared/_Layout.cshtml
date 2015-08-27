@@ -27,7 +27,7 @@
 
             <div class="pull-right">
                 @using (Ajax.BeginForm(actionName: "Search", controllerName: "Home", routeValues: null,
-                ajaxOptions: new AjaxOptions { UpdateTargetId = "target", HttpMethod = "POST" },
+                ajaxOptions: new AjaxOptions { UpdateTargetId = "target", HttpMethod = "POST", OnFailure = "showXHRError"},
                 htmlAttributes: new { @class = "navbar-form", role = "search", id = "NAME" }))
                 {  
                     <div class="input-group">

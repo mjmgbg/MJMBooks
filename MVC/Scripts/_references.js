@@ -18,3 +18,4 @@
 /// <reference path="file-upload/jquery.fileupload.js" />
 /// <reference path="book.events.js" />
 /// <reference path="sidebar.events.js" />
+/// <reference path="alertify.min.js" />

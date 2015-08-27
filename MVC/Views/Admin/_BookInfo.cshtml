@@ -5,7 +5,7 @@
 }
 
 @using (Ajax.BeginForm(actionName: "SaveBook", controllerName: "Admin", routeValues: null,
-    ajaxOptions: new AjaxOptions { UpdateTargetId = "target", HttpMethod = "POST" },
+    ajaxOptions: new AjaxOptions { UpdateTargetId = "target", HttpMethod = "POST", OnFailure = "showXHRError" },
     htmlAttributes: new { id = "frmSave", role = "form" }))
 {
     @Html.AntiForgeryToken()

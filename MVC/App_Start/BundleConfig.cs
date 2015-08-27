@@ -17,14 +17,16 @@ namespace MVC
 								"~/Scripts/jquery.validate*"));
 		
 			bundles.Add(new ScriptBundle("~/bundles/app").Include(
-						 "~/Scripts/book.events.js",
-						 "~/Scripts/sidebar.events.js"));
+								"~/Scripts/alertify.js",
+								"~/Scripts/book.events.js",
+								 "~/Scripts/sidebar.events.js"));
 							
 			bundles.Add(new ScriptBundle("~/bundles/upload").Include(
 					"~/Scripts/file-upload/jquery.ui.widget.js",
 					"~/Scripts/file-upload/jquery.iframe-transport.js",
 					"~/Scripts/file-upload/jquery.fileupload.js"));
-
+			
+				
 		
 			// Use the development version of Modernizr to develop with and learn from. Then, when you're
 			// ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
@@ -38,6 +40,7 @@ namespace MVC
 			bundles.Add(new StyleBundle("~/Content/css").Include(
 					  "~/Content/bootstrap.css",
 					  "~/Content/sidebar.css",
+					  "~/Content/alertifyjs/alertify.css",					  
 					  "~/Content/site.css"));
 		}
 	}

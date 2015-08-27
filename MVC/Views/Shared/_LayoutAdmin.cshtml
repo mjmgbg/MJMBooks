@@ -28,7 +28,8 @@
             {
                 UpdateTargetId = "target",
                 InsertionMode = InsertionMode.Replace,
-                LoadingElementId = "loaderDiv"
+                LoadingElementId = "loaderDiv",
+                OnFailure = "showXHRError",
             },
             htmlAttributes: new { id = "BookAction" })
                     </li>
@@ -39,7 +40,8 @@
             {
                 UpdateTargetId = "target",
                 InsertionMode = InsertionMode.Replace,
-                LoadingElementId = "loaderDiv"
+                LoadingElementId = "loaderDiv",
+                OnFailure = "showXHRError",
             },
             htmlAttributes: new { id = "AuthorAction" })
                     </li>
@@ -50,7 +52,8 @@
             {
                 UpdateTargetId = "target",
                 InsertionMode = InsertionMode.Replace,
-                LoadingElementId = "loaderDiv"
+                LoadingElementId = "loaderDiv",
+                OnFailure = "showXHRError",
             },
             htmlAttributes: new { id = "ReaderAction" })
                     </li>
@@ -62,7 +65,7 @@
                 UpdateTargetId = "target",
                 InsertionMode = InsertionMode.Replace,
                 LoadingElementId = "loaderDiv",
-                OnFailure="",
+                OnFailure = "showXHRError",
             },
             htmlAttributes: new { id = "SeriesAction" })
                     </li>

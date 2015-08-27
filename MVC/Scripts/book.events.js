@@ -1,5 +1,7 @@
 ﻿$(function () {
+  
     initMenu();
+
     $('#wrapper').addClass('toggled-2');
     $('#sidebar-wrapper1').hide();
     $('#sidebar-wrapper2').hide();
@@ -46,3 +48,20 @@
         });
     }
 });
+
+showXHRError = function (xhr, status, err) {
+    alertify.set('notifier', 'position', 'top-right');
+    alertify.error(formatErrorMessage(xhr));
+}
+formatErrorMessage = function(jqXHR) {
+
+    if (jqXHR.status === 0) {
+        return ('Not connected.\nPlease verify your network connection.');
+    } else if (jqXHR.status == 404) {
+        return ('The requested page not found. [404]');
+    } else if (jqXHR.status == 500) {
+        return ('Internal Server Error [500].');
+    } else {
+        return ('Uncaught Error.\n' + jqXHR.responseText);
+    }
+}

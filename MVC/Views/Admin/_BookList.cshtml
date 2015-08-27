@@ -8,7 +8,8 @@
             {
                 UpdateTargetId = "target",
                 InsertionMode = InsertionMode.Replace,
-                LoadingElementId = "loaderDiv"
+                LoadingElementId = "loaderDiv",
+                OnFailure = "showXHRError"
             },
             htmlAttributes: new { id = "AddBook" })
 
@@ -57,7 +58,8 @@
             {
                 UpdateTargetId = "target",
                 InsertionMode = InsertionMode.Replace,
-                LoadingElementId = "loaderDiv"
+                LoadingElementId = "loaderDiv",
+                OnFailure = "showXHRError"
             },
             htmlAttributes: new { id = "EditBook" })
 
@@ -69,7 +71,8 @@
             {
                 UpdateTargetId = "target",
                 InsertionMode = InsertionMode.Replace,
-                LoadingElementId = "loaderDiv"
+                LoadingElementId = "loaderDiv",
+                OnFailure = "showXHRError"
             },
             htmlAttributes: new { id = "DeleteBook" })
 
