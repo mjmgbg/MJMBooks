@@ -28,7 +28,7 @@
             <div class="pull-right">
                 @using (Ajax.BeginForm(actionName: "Search", controllerName: "Home", routeValues: null,
                 ajaxOptions: new AjaxOptions { UpdateTargetId = "target", HttpMethod = "POST", OnFailure = "showXHRError"},
-                htmlAttributes: new { @class = "navbar-form", role = "search", id = "NAME" }))
+                htmlAttributes: new { @class = "navbar-form", role = "search", id = "frmSearch",  LoadingElementId = "loaderDiv" }))
                 {  
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Sök författre eller titel" name="search" id="search">

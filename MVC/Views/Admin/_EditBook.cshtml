@@ -1,6 +1,8 @@
 ﻿@model Entities.BookModel
 
-@using (Html.BeginForm())
+@using (Ajax.BeginForm(actionName: "EditBook", controllerName: "Admin", routeValues: null,
+    ajaxOptions: new AjaxOptions { UpdateTargetId = "target", HttpMethod = "POST", LoadingElementId = "loaderDiv" },
+    htmlAttributes: new { role = "form", id = "frmEditBook" }))
 {
     @Html.AntiForgeryToken()
     

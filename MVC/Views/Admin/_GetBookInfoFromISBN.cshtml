@@ -1,6 +1,8 @@
 ﻿@model MVC.Models.ISBNViewModel
 
-@using (Html.BeginForm())
+@using (Ajax.BeginForm(actionName: "GetInfoFromAdlibris", controllerName: "Admin", routeValues: null,
+    ajaxOptions: new AjaxOptions { UpdateTargetId = "target", HttpMethod = "POST", LoadingElementId = "loaderDiv" },
+    htmlAttributes: new { role = "form", id = "frmGetInfoFromAdlibris" }))
 {
     @Html.AntiForgeryToken()
 

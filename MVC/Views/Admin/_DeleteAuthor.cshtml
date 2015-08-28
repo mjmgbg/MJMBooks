@@ -24,7 +24,7 @@
     </dl>
 
 @using (Ajax.BeginForm(actionName: "DeleteAuthor", controllerName: "Admin", routeValues: null,
-    ajaxOptions: new AjaxOptions { UpdateTargetId = "target", HttpMethod = "POST" },
+    ajaxOptions: new AjaxOptions { UpdateTargetId = "target", HttpMethod = "POST", LoadingElementId = "loaderDiv" },
     htmlAttributes: new { role = "form", id = "frmDeleteAuthor" }))
 {
         @Html.AntiForgeryToken()

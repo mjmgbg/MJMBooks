@@ -1,7 +1,7 @@
 ﻿@model Entities.ReaderModel
 
 @using (Ajax.BeginForm(actionName: "EditReader", controllerName: "Admin", routeValues: null,
-    ajaxOptions: new AjaxOptions { UpdateTargetId = "target", HttpMethod = "POST" },
+    ajaxOptions: new AjaxOptions { UpdateTargetId = "target", HttpMethod = "POST", LoadingElementId = "loaderDiv" },
     htmlAttributes: new { role = "form", id = "frmEditReader" }))
 {
     @Html.AntiForgeryToken()

@@ -1,7 +1,7 @@
 ﻿@model Entities.SeriesModel
 
 @using (Ajax.BeginForm(actionName: "EditSerie", controllerName: "Admin", routeValues: null,
-    ajaxOptions: new AjaxOptions { UpdateTargetId = "target", HttpMethod = "POST" },
+    ajaxOptions: new AjaxOptions { UpdateTargetId = "target", HttpMethod = "POST", LoadingElementId = "loaderDiv" },
     htmlAttributes: new { role = "form", id = "frmEditSerie" }))
 {
     @Html.AntiForgeryToken()

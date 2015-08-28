@@ -1,7 +1,7 @@
 ﻿@model Entities.AuthorModel
 
 @using (Ajax.BeginForm(actionName: "SaveAuthor", controllerName: "Admin", routeValues: null,
-    ajaxOptions: new AjaxOptions { UpdateTargetId = "target", HttpMethod = "POST" },
+    ajaxOptions: new AjaxOptions { UpdateTargetId = "target", HttpMethod = "POST", LoadingElementId = "loaderDiv" },
     htmlAttributes: new { role = "form", id = "frmAddAuthor" }))
 {
     @Html.AntiForgeryToken()
