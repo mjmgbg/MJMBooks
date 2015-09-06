@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Business.DTO.NameViewModel>
+<div class="spacer"></div>
+<p>
+    @Ajax.ActionLink("Lägg till förlag", "AddPublisher", "Admin", null, new AjaxOptions
+    {
+        UpdateTargetId = "target",
+        InsertionMode = InsertionMode.Replace,
+        LoadingElementId = "loaderDiv",
+        OnFailure = "showXHRError"
+    }, new {id = "AddPublisher"})
+</p>
+<table class="table-condensed table-bordered">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Ajax.ActionLink("Ändra", "EditPublisher", "Admin", new {id = item.Id}, new AjaxOptions
+                {
+                    UpdateTargetId = "target",
+                    InsertionMode = InsertionMode.Replace,
+                    LoadingElementId = "loaderDiv",
+                    OnFailure = "showXHRError"
+                }, new {id = "EditPublisher"})
+
+                |
+
+                @Ajax.ActionLink("Radera", "DeletePublisher", "Admin", new {id = item.Id}, new AjaxOptions
+                {
+                    UpdateTargetId = "target",
+                    InsertionMode = InsertionMode.Replace,
+                    LoadingElementId = "loaderDiv",
+                    OnFailure = "showXHRError"
+                }, new {id = "DeletePublisher"})
+            </td>
+        </tr>
+    }
+</table>

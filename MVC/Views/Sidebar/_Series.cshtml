@@ -1,0 +1,21 @@
+﻿@model IEnumerable<Business.DTO.NameViewModel>
+
+<div id="sidebar-wrapper1" class="sidebar-wrapper">
+    <ul class=" sidebar-nav nav-pills nav-stacked" id="menu1">
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <li>
+                    @Ajax.ActionLink("Serie: ", "GetSeries", "Home", new {id = item.Id}, new AjaxOptions
+                    {
+                        UpdateTargetId = "target",
+                        InsertionMode = InsertionMode.Replace,
+                        LoadingElementId = "loaderDiv",
+                        OnFailure = "showXHRError"
+                    }, new {id = "seriesLink" + item.Id})
+                </li>
+            }
+        }
+    </ul>
+</div>

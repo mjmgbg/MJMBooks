@@ -193,3 +193,4 @@ ModelManifest.xml
 *PrivateSettings.config
 MJMBooks.sln.GhostDoc.xml
 *.pubxml
+/.vs/config/applicationhost.config

@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Entities
 {
-	public class LanguageModel : IDBLookup
-	{
-		public int Id { get; set; }
-		[Display(Name = "Språk:")]
-		public string Name { get; set; }
-	
+    public class LanguageModel : IName
+    {
+        public int Id { get; set; }
 
-	}
+        public string Name { get; set; }
+
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<BookModel> Books { get; set; } = new HashSet<BookModel>();
+    }
 }
-

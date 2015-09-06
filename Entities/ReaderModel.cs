@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Entities
 {
-	public class ReaderModel : IDBPerson
-	{
-		public int Id { get; set; }
-		public string FirstName { get; set; }
-		public string LastName { get; set; }
-		public string DisplayFullName { get { return FirstName + " " + LastName; } }
-		public List<BookModel> Books { get; set; }
-		public ReaderModel()
-		{
-			Books = new List<BookModel>();
-		}
-		
-	}
+    public class ReaderModel : IPerson
+    {
+        public int Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+
+        public string DisplayFullName => FirstName + " " + LastName;
+
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<BookModel> Books { get; set; } = new HashSet<BookModel>();
+    }
 }

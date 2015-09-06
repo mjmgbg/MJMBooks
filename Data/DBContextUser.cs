@@ -1,22 +1,17 @@
-﻿using Entities;
-using Microsoft.AspNet.Identity.EntityFramework;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Web;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+
 namespace Data
 {
-	public class DBContextUser: IdentityDbContext<ApplicationUser>
-	{
-		public DBContextUser()
-			: base("name=MJMBooks")
-		{
-		}
+    public class DbContextUser : IdentityDbContext<ApplicationUser>
+    {
+        public DbContextUser()
+            : base("name=MJMBooks")
+        {
+        }
 
-		public static DBContextUser Create()
-		{
-			return new DBContextUser();
-		}
-	}
+        public static DbContextUser Create()
+        {
+            return new DbContextUser();
+        }
+    }
 }

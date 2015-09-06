@@ -1,0 +1,21 @@
+﻿@model IEnumerable<Business.DTO.PersonViewModel>
+
+<div id="sidebar-wrapper3" class="sidebar-wrapper">
+    <ul class=" sidebar-nav nav-pills nav-stacked" id="menu3">
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <li>
+                    @Ajax.ActionLink(item.DisplayFullName, "GetReaders", "Home", new {id = item.Id}, new AjaxOptions
+                    {
+                        UpdateTargetId = "target",
+                        InsertionMode = InsertionMode.Replace,
+                        LoadingElementId = "loaderDiv",
+                        OnFailure = "showXHRError"
+                    }, new {id = "readersLink" + item.Id})
+                </li>
+            }
+        }
+    </ul>
+</div>

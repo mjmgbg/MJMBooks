@@ -1,449 +1,135 @@
-﻿using Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Web.Mvc;
 using Business;
-
+using Business.DTO;
+using Entities;
 
 namespace Data
 {
-	public class BookRepository 
-	{
-		private DBContextBook context;
+    public class BookRepository<T> : GenericRepository<T>, IBookRepository<T>
+        where T : class, IBaseObject
+    {
+        public BookRepository(DbContextBook context)
+            : base(context)
+        {
+        }
 
-		public BookRepository(DbContext dbContext)
-					{
-			context = dbContext as DBContextBook;
-		}
+        public override List<T> GetAll()
+        {
+            return
+                Context.Books.Include(b => b.Authors).Include(b => b.Readers).Include(b => b.Series).ToList() as List<T>;
+        }
 
-
-		public void Add(BookDetailDTO book)
-		{
-			string textColor = string.Empty, bgColor = string.Empty, textColorSecond = string.Empty;
-			//Get colors that will be used in list display
-			var topFiveColor = Helpers.GetThreeColors(book.ImagePath);
-			if (topFiveColor != null)
-			{
-				textColor = topFiveColor[1].R.ToString() + "," + topFiveColor[1].G.ToString() + "," + topFiveColor[1].B.ToString();
-				bgColor = topFiveColor[0].R.ToString() + "," + topFiveColor[0].G.ToString() + "," + topFiveColor[0].B.ToString();
-				textColorSecond = topFiveColor[2].R.ToString() + "," + topFiveColor[2].G.ToString() + "," + topFiveColor[2].B.ToString();
-			}
-			SeriesModel series = new SeriesModel();
-
-			if (book.SeriesName != string.Empty && book.SeriesName != null)
-			{
-				series = GetSeriesByName(book.SeriesName);
-			}
-			else
-			{
-				series = null;
-			}
-
-			List<ReaderModel> readers = new List<ReaderModel>();
-
-			if (book.ReaderNames != string.Empty && book.ReaderNames != null)
-			{
-				readers = GetReadersByName(book.ReaderNames).ToList();
-			}
-			else
-			{
-				readers = null;
-			}
-
-			BookModel newDBBook = new BookModel
-			{
-				Title = book.Title,
-				Description = book.Description,
-				ISBN = book.ISBN,
-				Series = series,
-				PublishingDate = Convert.ToDateTime(book.PublishingDate),
-				ImagePath = book.ImagePath,
-				Readers = readers,
-				Publisher = GetPublisherByName(book.PublisherName),
-				Authors = GetAuthorsByNames(book.AuthorNames),
-				Genres = GetGenresByName(book.GenreNames),
-				Language = GetLanguageByName(book.Language),
-				TextColor = textColor,
-				BgColor = bgColor,
-				TextColorSecond = textColorSecond,
-			};
-			context.Books.Add(newDBBook);
-			context.SaveChanges();
-		}
-
-		public bool IsBookInDB(string isbn)
-		{	
-			var book = context.Books.Where(b => b.ISBN == isbn).FirstOrDefault();
-			if (book != null)
-			{
-				return true;
-			}
-			return false;
-		}
-
-		public List<BookModel> GetAllBooks()
-		{
-			var books = context.Books.AsEnumerable().Select(b => new BookModel
-			{
-				Title = b.Title,
-				Id = b.Id,
-				Authors = GetBookAuthors(b.Id),
-				Description = b.Description,
-				LanguageId = b.LanguageId,
-				PublisherId = b.PublisherId,
-				Series =b.Series,
-				Readers = GetBookReaders(b.Id),
-				Genres = GetBookGenres(b.Id),
-				ISBN = b.ISBN,
-				ImagePath = b.ImagePath,
-				Language =b.Language,
-				Publisher = b.Publisher,
-				PublishingDate = b.PublishingDate,
-			}).ToList();
-			return books;
-		}
-
-		public BookModel GetBookById(int id)
-		{
-			var book = context.Books.AsEnumerable().Where(b => b.Id == id).Select(b => new BookModel
-			{
-				Title = b.Title,
-				Id = b.Id,
-				Authors = GetBookAuthors(b.Id),
-				Readers = GetBookReaders(b.Id),
-				Series = b.Series,
-				Description = b.Description,
-				Genres = GetBookGenres(b.Id),
-				ISBN = b.ISBN,
-				LanguageId = b.LanguageId,
-				PublisherId = b.PublisherId,
-				PublishingDate = b.PublishingDate,
-				Publisher = b.Publisher,
-				ImagePath = b.ImagePath,
-				Language = b.Language,
-			}).FirstOrDefault();
-			return book;
-		}
-
-		private List<GenreModel> GetBookGenres(int id)
-		{
-			return context.Genres.SelectMany(g => g.Books.Where(b => b.Id == id), (a, b) => a).Select(c => new GenreModel
-			{
-				Id = c.Id,
-				Name = c.Name
-			}).ToList();
-		}
-
-		private List<AuthorModel> GetBookAuthors(int id)
-		{
-			return context.Authors.SelectMany(a => a.Books.Where(b => b.Id == id), (a, b) => a).Select(c => new AuthorModel
-			{
-				FirstName = c.FirstName,
-				LastName = c.LastName,
-				Id = c.Id
-			}).ToList();
-		}
-
-		private List<ReaderModel> GetBookReaders(int id)
-		{
-			return context.Readers.SelectMany(a => a.Books.Where(b => b.Id == id), (a, b) => a).Select(c => new ReaderModel
-			{
-				FirstName = c.FirstName,
-				LastName = c.LastName,
-				Id = c.Id
-			}).ToList();
-		}
-
-		private LanguageModel GetLanguageByName(string name)
-		{
-			var language = context.Languages.Where(p => p.Name.ToLower() == name.ToLower()).FirstOrDefault();
-			if (language != null)
-			{
-				return language;
-			}
-			else
-			{
-				return AddLanguageToDB(name);
-			}
-		}
-
-		private LanguageModel AddLanguageToDB(string name)
-		{
-			var newLanguage = new LanguageModel
-			{
-				Name = name,
-			};
-			context.Languages.Add(newLanguage);
-			context.SaveChanges();
-			return newLanguage;
-		}
-
-		private List<GenreModel> GetGenresByName(string genres)
-		{
-			var list = new List<GenreModel>();
-			string[] names = genres.Split(';');
-			foreach (var item in names)
-			{
-				list.Add(GetGenreByName(item));
-			}
-			return list;
-		}
-
-		private GenreModel GetGenreByName(string name)
-		{
-			var genre = context.Genres.Where(p => p.Name.ToLower() == name.ToLower()).FirstOrDefault();
-			if (genre != null)
-			{
-				return genre;
-			}
-			else
-			{
-				return AddGenreToDB(name);
-			}
-		}
-
-		private GenreModel AddGenreToDB(string name)
-		{
-			var newGenre = new GenreModel
-			{
-				Name = name,
-			};
-			context.Genres.Add(newGenre);
-			context.SaveChanges();
-			return newGenre;
-		}
+        public override T GetById(int id)
+        {
+            return
+                Context.Books.Include(b => b.Authors)
+                    .Include(b => b.Readers)
+                    .Include(b => b.Series)
+                    .FirstOrDefault(b => b.Id == id) as T;
+        }
 
 
-		private PublisherModel GetPublisherByName(string name)
-		{
-			var publisher = context.Publishers.Where(p => p.Name.ToLower() == name.ToLower()).FirstOrDefault();
-			if (publisher != null)
-			{
-				return publisher;
-			}
-			else
-			{
-				return AddPublisherToDB(name);
-			}
-		}
+        public bool IsBookInDb(string isbn)
+        {
+            var book = Context.Books.FirstOrDefault(b => b.Isbn == isbn);
+            return book != null;
+        }
 
-		private PublisherModel AddPublisherToDB(string name)
-		{
-			var newPublisher = new PublisherModel
-			{
-				Name = name,
-			};
-			context.Publishers.Add(newPublisher);
-			context.SaveChanges();
-			return newPublisher;
-		}
+        public BookViewModel ConvertDbToModel(T dbBook)
+        {
+            var book = GetById(dbBook.Id) as BookModel;
+            if (book == null) return null;
+            var authors = Converters.ConvertPersonDbToModel(book.Authors.ToList());
+            var readers = Converters.ConvertPersonDbToModel(book.Readers.ToList());
+            var publisher = Converters.ConvertLookUpDbToModel(book.Publisher);
+            var serie = Converters.ConvertLookUpDbToModel(book.Series);
+            var seriePart = Converters.ConvertLookUpDbToModel(book.SeriesPart);
+            return new BookViewModel
+            {
+                Id = book.Id,
+                LanguageId = book.LanguageId,
+                PublisherId = book.PublisherId,
+                SeriesId = book.SeriesId,
+                SeriesPartId = book.SeriesPartId,
+                Title = book.Title,
+                Description = book.Description,
+                Isbn = book.Isbn,
+                ImagePath = book.ImagePath,
+                BgColor = book.BgColor,
+                TextColor = book.TextColor,
+                TextColorSecond = book.TextColorSecond,
+                IsRead = book.IsRead,
+                Authors = authors,
+                Readers = readers,
+                Publisher = publisher,
+                Series = serie,
+                SeriesPart = seriePart,
+                PublishingDate = book.PublishingDate,
+                CreateDate = book.CreateDate,
+                UpdateDate = book.UpdateDate
+            };
+        }
 
-		private SeriesModel GetSeriesByName(string name)
-		{
-			var series = context.Series.Where(p => p.Name.ToLower() == name.ToLower()).FirstOrDefault();
-			if (series != null)
-			{
-				return series;
-			}
-			else
-			{
-				return AddSeriesToDB(name);
-			}
-		}
+        public List<BookViewModel> ConvertDbToModel(List<T> dbBook)
+        {
+            return dbBook.Select(ConvertDbToModel).ToList();
+        }
 
-		private SeriesModel AddSeriesToDB(string name)
-		{
-			var newSeries = new SeriesModel
-			{
-				Name = name,
-			};
-			context.Series.Add(newSeries);
-			context.SaveChanges();
-			return newSeries;
-		}
+        public T ConvertModelToDb(BookViewModel modelBook)
+        {
+            var book = GetById(modelBook.Id) as BookModel ?? new BookModel();
 
-		private List<AuthorModel> GetAuthorsByNames(string authors)
-		{
-			var list = new List<AuthorModel>();
-			string[] names = authors.Split(';');
-			foreach (var item in names)
-			{
-				list.Add(GetAuthorByName(item));
-			}
-			return list;
-		}
+            book.Authors.Clear();
+            book.Readers.Clear();
+            var authorList = SetSelectedPersonsToList<AuthorModel>(modelBook.AuthorsList);
+            var readerList = SetSelectedPersonsToList<ReaderModel>(modelBook.ReadersList);
+            var language = Context.Languages.Find(modelBook.LanguageId);
+            var publisher = Context.Publishers.Find(modelBook.PublisherId);
+            var serie = Context.Series.Find(modelBook.SeriesId);
+            var seriePart = Context.SeriesPart.Find(modelBook.SeriesPartId);
 
-		private AuthorModel GetAuthorByName(string authors)
-		{
-			string[] names = authors.Split(' ');
-			string fName = string.Empty;
-			string lName = names[names.Count() - 1].ToLower();
-			fName = GetFirstName(names);
+            book.LanguageId = modelBook.LanguageId;
+            book.PublisherId = modelBook.PublisherId;
+            book.SeriesId = modelBook.SeriesId;
+            book.SeriesPartId = modelBook.SeriesPartId;
+            book.Publisher = publisher;
+            book.Language = language;
+            book.Readers = readerList;
+            //book.Authors = authorList;
+            book.Genres = null;
+            book.Series = serie;
+            book.SeriesPart = seriePart;
+            book.Title = modelBook.Title;
+            book.Description = modelBook.Description;
+            book.Isbn = modelBook.Isbn;
+            book.ImagePath = modelBook.ImagePath;
+            book.BgColor = modelBook.BgColor;
+            book.TextColor = modelBook.TextColor;
+            book.TextColorSecond = modelBook.TextColorSecond;
+            book.IsRead = modelBook.IsRead;
+            book.PublishingDate = modelBook.PublishingDate;
+            book.CreateDate = modelBook.CreateDate;
+            book.UpdateDate = modelBook.UpdateDate;
+            return book as T;
+        }
 
-			var author = context.Authors.Where(a => a.FirstName.ToLower() == fName && a.LastName.ToLower() == lName).FirstOrDefault();
-			var list = new List<AuthorModel>();
-			if (author != null)
-			{
-				list.Add(author);
-			}
-			else
-			{
-				list.Add(AddAuthorToDB(fName, lName));
-			};
-			return list[0];
-		}
 
-		private static string GetFirstName(string[] names)
-		{
-			string fName = string.Empty;
+        private List<T1> SetSelectedPersonsToList<T1>(int[] modelList)
+            where T1 : class
 
-			for (int i = 0; i < names.Count(); i++)
-			{
-				if (i < names.Count() - 1)
-				{
-					fName += names[i] + " ";
-				}
-			}
-			return fName.Trim();
-		}
+        {
+            var dbSet = Context.Set<T1>();
+            return modelList.Select(item => dbSet.Find(item)).Where(entity => entity != null).ToList();
+        }
 
-		private AuthorModel AddAuthorToDB(string fName, string lName)
-		{
-			fName = fName.First().ToString().ToUpper() + fName.Substring(1);
-			lName = lName.First().ToString().ToUpper() + lName.Substring(1);
-			var newAuthor = new AuthorModel
-			{
-				FirstName = fName,
-				LastName = lName,
-			};
-			context.Authors.Add(newAuthor);
-			context.SaveChanges();
-			return newAuthor;
-		}
-
-		private ICollection<ReaderModel> GetReadersByName(string readers)
-		{
-			//TODO: Handle more then one reader
-			string[] names = readers.Split(' ');
-			string fName = string.Empty;
-			string lName = names[names.Count() - 1].ToLower();
-			fName = GetFirstName(names);
-
-			var reader = context.Readers.Where(a => a.FirstName.ToLower() == fName && a.LastName.ToLower() == lName).FirstOrDefault();
-			var list = new List<ReaderModel>();
-			if (reader != null)
-			{
-				list.Add(reader);
-			}
-			else
-			{
-				list.Add(AddReaderToDB(fName, lName));
-			};
-			return list;
-		}
-
-		private ReaderModel AddReaderToDB(string fName, string lName)
-		{
-			fName = fName.First().ToString().ToUpper() + fName.Substring(1);
-			lName = lName.First().ToString().ToUpper() + lName.Substring(1);
-			var newReader = new ReaderModel
-			{
-				FirstName = fName,
-				LastName = lName,
-			};
-			context.Readers.Add(newReader);
-			context.SaveChanges();
-			return newReader;
-		}
-
-	
-		public void Edit(BookModel book)
-		{
-			var bookToEdit = context.Books.Find(book.Id);
-			bookToEdit = SaveEditedBook(book, bookToEdit);
-			context.SaveChanges();
-		}
-
-		public void Delete(int id)
-		{
-			var bookToDelete = context.Books.Find(id);
-			context.Books.Remove(bookToDelete);
-			context.SaveChanges();
-		}
-
-		public BookModel SaveEditedBook(BookModel oldBook, BookModel book)
-		{
-			book.Id = oldBook.Id;
-			book.Authors = ConvertModelAuthorToDBAuthor(oldBook.Id);
-			book.Publisher = GetPublisherByName(book.Publisher.Name);
-			book.Genres = ConvertModelGenreToDBGenre(oldBook.Id);
-			if (oldBook.Readers != null)
-			{
-				book.Readers = ConvertModelReaderToDBReader(oldBook.Id);
-			}
-			book.Language = GetLanguageByName(book.Language.Name);
-			if (oldBook.Series != null)
-			{
-				book.Series = GetSeriesByName(oldBook.Series.Name);
-			}
-			book.Title = oldBook.Title;
-			book.Description = oldBook.Description;
-			book.ImagePath = oldBook.ImagePath;
-			book.ISBN = oldBook.ISBN;
-			book.PublishingDate = oldBook.PublishingDate;
-			return book;
-		}
-
-		private static string ConvertGenresToString(BookModel model)
-		{
-			string genres = string.Empty;
-			foreach (var item in model.Genres)
-			{
-				genres += item.Name + ";";
-			}
-			genres = genres.Substring(0, genres.Length - 1);
-			return genres;
-		}
-
-		private static string ConvertAuthorsToString(BookModel model)
-		{
-			string authors = string.Empty;
-
-			foreach (var item in model.Authors)
-			{
-				authors += item.DisplayFullName + ";";
-			}
-			authors = authors.Substring(0, authors.Length - 1);
-			return authors;
-		}
-
-		private static string ConvertReadersToString(BookModel model)
-		{
-			string readers = string.Empty;
-
-			foreach (var item in model.Readers)
-			{
-				readers += item.DisplayFullName + ";";
-			}
-			readers = readers.Substring(0, readers.Length - 1);
-			return readers;
-		}
-
-		public List<AuthorModel> ConvertModelAuthorToDBAuthor(int id)
-		{
-			return context.Books.Where(b => b.Id == id).FirstOrDefault().Authors.ToList();
-		}
-
-		public List<ReaderModel> ConvertModelReaderToDBReader(int id)
-		{
-			return context.Books.Where(b => b.Id == id).FirstOrDefault().Readers.ToList();
-		}
-
-		public List<GenreModel> ConvertModelGenreToDBGenre(int id)
-		{
-			return context.Books.Where(b => b.Id == id).FirstOrDefault().Genres.ToList();
-		}
-
-	}
+        public void AddFromAdlibris(string connectionString, BookDetailDto dto)
+        {
+            AdlibrisHelper.Context = Context;
+            AdlibrisHelper.AddFromAdlibris(connectionString,dto);
+        }
+    }
 }

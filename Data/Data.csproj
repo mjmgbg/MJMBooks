@@ -52,16 +52,92 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Spatial, Version=5.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Spatial.5.2.0\lib\net40\System.Spatial.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdlibrisHelper.cs" />
+    <Compile Include="ApplicationUser.cs" />
     <Compile Include="BookRepository.cs" />
+    <Compile Include="GenericRepository.cs" />
+    <Compile Include="IBookRepository.cs" />
+    <Compile Include="IGenericRepository.cs" />
+    <Compile Include="Migrations\201509040746231_DeletedAllowOrigin.cs" />
+    <Compile Include="Migrations\201509040746231_DeletedAllowOrigin.Designer.cs">
+      <DependentUpon>201509040746231_DeletedAllowOrigin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ParseHTML.cs" />
+    <Compile Include="UnitOfWork.cs" />
+    <Compile Include="IUnitOfWork.cs" />
+    <Compile Include="Migrations\201508230654388_PartNumberInSeries.cs" />
+    <Compile Include="Migrations\201508230654388_PartNumberInSeries.Designer.cs">
+      <DependentUpon>201508230654388_PartNumberInSeries.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201508230701118_SeriesNameIsRequired.cs" />
+    <Compile Include="Migrations\201508230701118_SeriesNameIsRequired.Designer.cs">
+      <DependentUpon>201508230701118_SeriesNameIsRequired.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201508230816160_SeriesPart.cs" />
+    <Compile Include="Migrations\201508230816160_SeriesPart.Designer.cs">
+      <DependentUpon>201508230816160_SeriesPart.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201508230836197_FixedSeriesColumnNames.cs" />
+    <Compile Include="Migrations\201508230836197_FixedSeriesColumnNames.Designer.cs">
+      <DependentUpon>201508230836197_FixedSeriesColumnNames.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201508230844406_FixedSeriesColumnNames2.cs" />
+    <Compile Include="Migrations\201508230844406_FixedSeriesColumnNames2.Designer.cs">
+      <DependentUpon>201508230844406_FixedSeriesColumnNames2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201508230915398_AddedNullForSeries.cs" />
+    <Compile Include="Migrations\201508230915398_AddedNullForSeries.Designer.cs">
+      <DependentUpon>201508230915398_AddedNullForSeries.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201508270758077_create-and-update-date.cs" />
+    <Compile Include="Migrations\201508270758077_create-and-update-date.Designer.cs">
+      <DependentUpon>201508270758077_create-and-update-date.cs</DependentUpon>
+    </Compile>
     <Compile Include="DBContextBook.cs" />
     <Compile Include="DBContextUser.cs" />
+    <Compile Include="Migrations\201508210649395_Init.cs" />
+    <Compile Include="Migrations\201508210649395_Init.Designer.cs">
+      <DependentUpon>201508210649395_Init.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201509010737011_ChangedSeriesPart.cs" />
+    <Compile Include="Migrations\201509010737011_ChangedSeriesPart.Designer.cs">
+      <DependentUpon>201509010737011_ChangedSeriesPart.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -70,13 +146,48 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Business\Business.csproj">
-      <Project>{7aa28bb9-f373-4463-a343-0d74d7db16cf}</Project>
+      <Project>{0de5abce-ab39-4b0e-a1c5-0a344c719ca2}</Project>
       <Name>Business</Name>
     </ProjectReference>
     <ProjectReference Include="..\Entities\Entities.csproj">
       <Project>{14b37027-c3d0-44b8-b1eb-5412a15c0e88}</Project>
       <Name>Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201508210649395_Init.resx">
+      <DependentUpon>201508210649395_Init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508230654388_PartNumberInSeries.resx">
+      <DependentUpon>201508230654388_PartNumberInSeries.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508230701118_SeriesNameIsRequired.resx">
+      <DependentUpon>201508230701118_SeriesNameIsRequired.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508230816160_SeriesPart.resx">
+      <DependentUpon>201508230816160_SeriesPart.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508230836197_FixedSeriesColumnNames.resx">
+      <DependentUpon>201508230836197_FixedSeriesColumnNames.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508230844406_FixedSeriesColumnNames2.resx">
+      <DependentUpon>201508230844406_FixedSeriesColumnNames2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508230915398_AddedNullForSeries.resx">
+      <DependentUpon>201508230915398_AddedNullForSeries.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508270758077_create-and-update-date.resx">
+      <DependentUpon>201508270758077_create-and-update-date.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509010737011_ChangedSeriesPart.resx">
+      <DependentUpon>201509010737011_ChangedSeriesPart.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509040746231_DeletedAllowOrigin.resx">
+      <DependentUpon>201509040746231_DeletedAllowOrigin.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ConnectionStrings.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
