@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Entities
 {
-	public class SeriesModel
-	{
-		public int Id { get; set; }
-		[Display(Name = "Namn")]
-		public string Name { get; set; }
+    public class SeriesModel : IName
+    {
+        public int Id { get; set; }
 
-		
-	}
+        public string Name { get; set; }
+
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<BookModel> Books { get; set; } = new HashSet<BookModel>();
+    }
 }

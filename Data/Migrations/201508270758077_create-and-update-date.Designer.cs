@@ -7,9 +7,9 @@ namespace Data.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class createandupdatedate : IMigrationMetadata
+    public sealed partial class Createandupdatedate : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(createandupdatedate));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Createandupdatedate));
         
         string IMigrationMetadata.Id
         {

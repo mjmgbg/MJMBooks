@@ -1,36 +1,37 @@
-﻿using Entities;
-using System.Web.Http;
+﻿using System.Web.Http;
 using System.Web.Http.Cors;
+using Business.DTO;
+using Data;
 using WebAPI.Models;
 
 namespace WebAPI.Controllers
 {
-	[EnableCors("http://localhost:3603,http://mjmbooks.azurewebsites.net,http://books.maaninka.nu", "*", "*")]
-	public class AdlibrisController : ApiController
-	{
-		public void Get()
-		{
-		}
+    [EnableCors("http://localhost:3603,http://mjmbooks.azurewebsites.net,http://books.maaninka.nu", "*", "*")]
+    public class AdlibrisController : ApiController
+    {
+        public void Get()
+        {
+        }
 
-		public BookDetailDTO Get(string id)
-		{
-			var newBook = new BookDetailDTO();
-			bool isLoaded = ParseHTML.LoadDocument(id);
-			if (isLoaded)
-			{
-				newBook.Title = ParseHTML.GetTitle();
-				newBook.AuthorNames = ParseHTML.GetAuthors();
-				newBook.PublishingDate = ParseHTML.GetDate();
-				newBook.ISBN = id;
-				newBook.Description = ParseHTML.GetDescription();
-				newBook.SeriesName = ParseHTML.GetSeries();
-				newBook.PublisherName = ParseHTML.GetPublisher();
-				newBook.Language = ParseHTML.GetLanguage();
-				newBook.ReaderNames = ParseHTML.GetReader();
-				newBook.GenreNames = ParseHTML.GetGenres();
-			}
+        public BookDetailDto Get(string id)
+        {
+            var newBook = new BookDetailDto();
+            var isLoaded = ParseHtml.LoadDocument(id);
+            if (isLoaded)
+            {
+                newBook.Title = ParseHtml.GetTitle();
+                newBook.AuthorNames = ParseHtml.GetAuthors();
+                newBook.PublishingDate = ParseHtml.GetDate();
+                newBook.Isbn = id;
+                newBook.Description = ParseHtml.GetDescription();
+                newBook.SeriesName = ParseHtml.GetSeries();
+                newBook.PublisherName = ParseHtml.GetPublisher();
+                newBook.Language = ParseHtml.GetLanguage();
+                newBook.ReaderNames = ParseHtml.GetReader();
+                newBook.GenreNames = ParseHtml.GetGenres();
+            }
 
-			return newBook;
-		}
-	}
+            return newBook;
+        }
+    }
 }

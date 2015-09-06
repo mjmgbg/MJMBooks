@@ -1,32 +1,39 @@
-﻿@model IEnumerable<Entities.BookModel>
+﻿@model List<Business.DTO.BookViewModel>
 <div class="spacer"></div>
 <p>
 
-    @Ajax.ActionLink(linkText: "Lägg till bok",
-            actionName: "AddBook", controllerName: "Admin", routeValues: null,
-            ajaxOptions: new AjaxOptions
-            {
-                UpdateTargetId = "target",
-                InsertionMode = InsertionMode.Replace,
-                LoadingElementId = "loaderDiv",
-                OnFailure = "showXHRError"
-            },
-            htmlAttributes: new { id = "AddBook" })
+    @Ajax.ActionLink("Lägg till bok med info från adlibris", "AddBook", "Admin", null, new AjaxOptions
+    {
+        UpdateTargetId = "target",
+        InsertionMode = InsertionMode.Replace,
+        LoadingElementId = "loaderDiv",
+        OnFailure = "showXHRError"
+    }, new {id = "AddBook"})
 
+    |
+
+    @Ajax.ActionLink("Lägg till bok utam info från adlibris", "CreateBook", "Admin", null, new AjaxOptions
+    {
+        UpdateTargetId = "target",
+        InsertionMode = InsertionMode.Replace,
+        LoadingElementId = "loaderDiv",
+        OnFailure = "showXHRError"
+    }, new {id = "CreateBook"})
 </p>
+
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Authors)
+            @Html.DisplayNameFor(model => model[0].Authors)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Title)
+            @Html.DisplayNameFor(model => model[0].Title)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ISBN)
+            @Html.DisplayNameFor(model => model[0].Isbn)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Readers)
+            @Html.DisplayNameFor(model => model[0].Readers)
         </th>
 
         <th></th>
@@ -34,8 +41,8 @@
 
     @foreach (var item in Model)
     {
-        var authorsNames = item.GetAuthors(item);
-        var readersNames = item.GetReaders(item);
+        var authorsNames = item.GetAuthors();
+        var readersNames = item.GetReaders();
 
         <tr>
             <td>
@@ -45,40 +52,31 @@
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ISBN)
+                @Html.DisplayFor(modelItem => item.Isbn)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => readersNames)
             </td>
             <td>
 
-                @Ajax.ActionLink(linkText: "Ändra",
-            actionName: "EditBook", controllerName: "Admin", routeValues: new { id = item.Id },
-            ajaxOptions: new AjaxOptions
-            {
-                UpdateTargetId = "target",
-                InsertionMode = InsertionMode.Replace,
-                LoadingElementId = "loaderDiv",
-                OnFailure = "showXHRError"
-            },
-            htmlAttributes: new { id = "EditBook" })
+                @Ajax.ActionLink("Ändra", "EditBook", "Admin", new {id = item.Id}, new AjaxOptions
+                {
+                    UpdateTargetId = "target",
+                    InsertionMode = InsertionMode.Replace,
+                    LoadingElementId = "loaderDiv",
+                    OnFailure = "showXHRError"
+                }, new {id = "EditBook"})
 
                 |
 
-                @Ajax.ActionLink(linkText: "Radera",
-            actionName: "DeleteBook", controllerName: "Admin", routeValues: new { id = item.Id },
-            ajaxOptions: new AjaxOptions
-            {
-                UpdateTargetId = "target",
-                InsertionMode = InsertionMode.Replace,
-                LoadingElementId = "loaderDiv",
-                OnFailure = "showXHRError"
-            },
-            htmlAttributes: new { id = "DeleteBook" })
-
-
+                @Ajax.ActionLink("Radera", "DeleteBook", "Admin", new {id = item.Id}, new AjaxOptions
+                {
+                    UpdateTargetId = "target",
+                    InsertionMode = InsertionMode.Replace,
+                    LoadingElementId = "loaderDiv",
+                    OnFailure = "showXHRError"
+                }, new {id = "DeleteBook"})
             </td>
         </tr>
     }
-
 </table>

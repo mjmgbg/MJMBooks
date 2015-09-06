@@ -1,20 +1,15 @@
-﻿@model IEnumerable<Entities.SeriesModel>
+﻿@model IEnumerable<Business.DTO.NameViewModel>
 <div class="spacer"></div>
 <p>
-    @Ajax.ActionLink(linkText: "Lägg till serie",
-            actionName: "AddSerie", controllerName: "Admin", routeValues: null,
-            ajaxOptions: new AjaxOptions
-            {
-                UpdateTargetId = "target",
-                InsertionMode = InsertionMode.Replace,
-                LoadingElementId = "loaderDiv",
-                OnFailure = "showXHRError"
-            },
-            htmlAttributes: new { id = "AddSeries" })
-
-
+    @Ajax.ActionLink("Lägg till serie", "AddSerie", "Admin", null, new AjaxOptions
+    {
+        UpdateTargetId = "target",
+        InsertionMode = InsertionMode.Replace,
+        LoadingElementId = "loaderDiv",
+        OnFailure = "showXHRError"
+    }, new {id = "AddSeries"})
 </p>
-<table class="table">
+<table class="table-condensed table-bordered">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Name)
@@ -22,39 +17,31 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Ajax.ActionLink(linkText: "Ändra",
-            actionName: "EditSerie", controllerName: "Admin", routeValues: new { id = item.Id },
-            ajaxOptions: new AjaxOptions
-            {
-                UpdateTargetId = "target",
-                InsertionMode = InsertionMode.Replace,
-                LoadingElementId = "loaderDiv",
-                OnFailure = "showXHRError"
-            },
-            htmlAttributes: new { id = "EditSeries" })
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Ajax.ActionLink("Ändra", "EditSerie", "Admin", new {id = item.Id}, new AjaxOptions
+                {
+                    UpdateTargetId = "target",
+                    InsertionMode = InsertionMode.Replace,
+                    LoadingElementId = "loaderDiv",
+                    OnFailure = "showXHRError"
+                }, new {id = "EditSeries"})
 
-            |
+                |
 
-            @Ajax.ActionLink(linkText: "Radera",
-            actionName: "DeleteSerie", controllerName: "Admin", routeValues: new { id = item.Id },
-            ajaxOptions: new AjaxOptions
-            {
-                UpdateTargetId = "target",
-                InsertionMode = InsertionMode.Replace,
-                LoadingElementId = "loaderDiv",
-                OnFailure = "showXHRError"
-            },
-            htmlAttributes: new { id = "DeleteSeries" })
-
-
-        </td>
-    </tr>
-}
-
+                @Ajax.ActionLink("Radera", "DeleteSerie", "Admin", new {id = item.Id}, new AjaxOptions
+                {
+                    UpdateTargetId = "target",
+                    InsertionMode = InsertionMode.Replace,
+                    LoadingElementId = "loaderDiv",
+                    OnFailure = "showXHRError"
+                }, new {id = "DeleteSeries"})
+            </td>
+        </tr>
+    }
 </table>

@@ -1,43 +1,42 @@
-﻿@model MVC.Models.BookViewModel
+﻿@model Business.DTO.BookViewModel
 
 <div id="uploadFrame" class="form-group">
-    @Html.LabelFor(model => model.Book.ImagePath, htmlAttributes: new { @class = "ImagePathLabel" })
+    @Html.LabelFor(model => model.ImagePath, new {@class = "ImagePathLabel"})
     <span id="uploadButtons">
         <span class="btn btn-success fileinput-button">
             <span id="message">V&auml;lj en fil...</span>
-            @Html.TextBoxFor(f => f.File.File, new { id = "upload", type = "file" })
+            @Html.TextBoxFor(f => f.File, new {id = "upload", type = "file"})
         </span>
         <a class="btn btn-primary" href="#" id="start-upload">Ladda upp filen</a>
-        @Html.ValidationMessageFor(model => model.Book.ImagePath, "", new { @class = "text-danger" })
-
+        @Html.ValidationMessageFor(model => model.ImagePath, "", new {@class = "text-danger"})
     </span>
 </div>
-
 
 <script type="text/javascript">
 
     var jqXHRData;
     var savedFileName;
     var isbn;
-    $(document).ready(function () {
+    $(document).ready(function() {
         'use strict';
-        isbn = $("#Book_ISBN").val();
+        isbn = $("#Isbn").val();
         $('#upload').fileupload({
             url: 'http://booksapi.maaninka.nu/api/photo',
             dataType: 'json',
             crossDomain: true,
             type: "POST",
             formData: { isbn: isbn },
-            add: function (e, data) {
+            add: function(e, data) {
                 jqXHRData = data;
             },
-            done: function (event, data) {
-                $("#Book_ImagePath").val(savedFileName);
+            done: function(event, data) {
+                alert(savedFileName);
+                $("#ImagePath").val(savedFileName);
                 $(".field-validation-error").empty();
                 $("#message").html(data.result.message);
 
             },
-            fail: function (event, data) {
+            fail: function(event, data) {
                 if (data.files[0].error) {
                     alert(data.files[0].error);
                 }
@@ -45,14 +44,14 @@
         });
     });
 
-    $("#start-upload").on('click', function () {
+    $("#start-upload").on('click', function() {
         if (jqXHRData) {
             jqXHRData.submit();
         }
         return false;
     });
 
-    $("#upload").on('change', function () {
+    $("#upload").on('change', function() {
         $("#message").html(this.files[0].name);
         var ext = this.files[0].name.split('.').pop();
         savedFileName = isbn + "." + ext;

@@ -37,21 +37,17 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AllowOriginModel.cs" />
     <Compile Include="AuthorModel.cs" />
-    <Compile Include="BookDetailDTO.cs" />
     <Compile Include="BookModel.cs" />
-    <Compile Include="FileUpload.cs" />
     <Compile Include="GenreModel.cs" />
+    <Compile Include="IBaseObject.cs" />
+    <Compile Include="IName.cs" />
     <Compile Include="IPerson.cs" />
     <Compile Include="LanguageModel.cs" />
-    <Compile Include="PhotoActionResult.cs" />
-    <Compile Include="PhotoViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PublisherModel.cs" />
     <Compile Include="ReaderModel.cs" />

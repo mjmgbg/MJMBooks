@@ -1,67 +1,60 @@
-﻿using Data;
-using Entities;
-using System;
-using System.Configuration;
+﻿using System.Configuration;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Web.OData;
-using WebAPI.Models;
-
+using Business.DTO;
+using Data;
 
 namespace WebAPI.Controllers
 {
-	[EnableCors("http://localhost:3603,http://mjmbooks.azurewebsites.net, http://books.maaninka.nu", "*", "*")]
-	public class BookController : ApiController
-	{
-		private BookRepository repo;
-		private DBContextBook context;
+    [EnableCors("http://localhost:3603,http://mjmbooks.azurewebsites.net, http://books.maaninka.nu", "*", "*")]
+    public class BookController : ApiController
+    {
+        private readonly UnitOfWork _uow;
 
-		public BookController()
-		{
-			context = new DBContextBook();
-			repo = new BookRepository(context);
-		}
+        public BookController()
+        {
+            _uow = new UnitOfWork();
+        }
 
-		[EnableQuery()]
-		public IQueryable<BookModel> Get()
-		{
-			return repo.GetAllBooks().AsQueryable();
-		}
+        [EnableQuery]
+        public IQueryable<BookViewModel> Get()
+        {
+            return _uow.BookRepository.ConvertDbToModel(_uow.BookRepository.GetAll().ToList()).AsQueryable();
+        }
 
-		public bool Get(string isbn)
-		{
-			return repo.IsBookInDB(isbn);
-		}
+        public bool Get(string isbn)
+        {
+            return _uow.BookRepository.IsBookInDb(isbn);
+        }
 
-		public BookModel Get(int id)
-		{
-			try
-			{
-				var book = repo.GetBookById(id);
-				return book;
-			}
-			catch (Exception)
-			{
-				throw;
-			}
-		}
+        public BookViewModel Get(int id)
+        {
+            return _uow.BookRepository.ConvertDbToModel(_uow.BookRepository.GetById(id));
+        }
 
-		public void Post([FromBody]BookDetailDTO model)
-		{
-			string connectionString = ConfigurationManager.ConnectionStrings["storageConnection"].ConnectionString;
-			string path = ConfigurationManager.AppSettings["storagePath"];
-			repo.Add(connectionString, path, model);
-		}
+        public void Post([FromBody] BookDetailDto model)
+        {
+            var connectionString = ConfigurationManager.ConnectionStrings["storageConnection"].ConnectionString;
+            _uow.BookRepository.AddFromAdlibris(connectionString,model);
+            _uow.Commit();
+        }
 
-		public void Put(int id, [FromBody]BookModel book)
-		{
-			repo.Edit(book);
-		}
+        public void Put(int id, [FromBody] BookViewModel book)
+        {
+            var dbBook = _uow.BookRepository.ConvertModelToDb(book);
+            _uow.BookRepository.InsertOrUpdate(dbBook);
+            _uow.Commit();
+        }
 
-		public void Delete(int id)
-		{
-			repo.Delete(id);
-		}
-	}
+        public void Delete(int id)
+        {
+            if (id > 0)
+            {
+                _uow.BookRepository.Delete(id);
+                _uow.Commit();
+            }
+        }
+    }
 }

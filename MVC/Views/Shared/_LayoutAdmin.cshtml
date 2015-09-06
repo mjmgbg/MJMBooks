@@ -1,88 +1,85 @@
-﻿@using System.Configuration;
+﻿@using System.Configuration
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ConfigurationManager.AppSettings["appName"]</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink(ConfigurationManager.AppSettings["appName"], "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>
-                        @Ajax.ActionLink(linkText: "Böcker",
-                     actionName: "BookList", controllerName: "Admin", routeValues: null,
-            ajaxOptions: new AjaxOptions
-            {
-                UpdateTargetId = "target",
-                InsertionMode = InsertionMode.Replace,
-                LoadingElementId = "loaderDiv",
-                OnFailure = "showXHRError",
-            },
-            htmlAttributes: new { id = "BookAction" })
-                    </li>
-                    <li>
-                        @Ajax.ActionLink(linkText: "Författare",
-                     actionName: "AuthorList", controllerName: "Admin", routeValues: null,
-            ajaxOptions: new AjaxOptions
-            {
-                UpdateTargetId = "target",
-                InsertionMode = InsertionMode.Replace,
-                LoadingElementId = "loaderDiv",
-                OnFailure = "showXHRError",
-            },
-            htmlAttributes: new { id = "AuthorAction" })
-                    </li>
-                    <li>
-                        @Ajax.ActionLink(linkText: "Uppläsare",
-                     actionName: "ReaderList", controllerName: "Admin", routeValues: null,
-            ajaxOptions: new AjaxOptions
-            {
-                UpdateTargetId = "target",
-                InsertionMode = InsertionMode.Replace,
-                LoadingElementId = "loaderDiv",
-                OnFailure = "showXHRError",
-            },
-            htmlAttributes: new { id = "ReaderAction" })
-                    </li>
-                    <li>
-                        @Ajax.ActionLink(linkText: "Serier",
-            actionName: "SerieList", controllerName: "Admin", routeValues: null,
-            ajaxOptions: new AjaxOptions
-            {
-                UpdateTargetId = "target",
-                InsertionMode = InsertionMode.Replace,
-                LoadingElementId = "loaderDiv",
-                OnFailure = "showXHRError",
-            },
-            htmlAttributes: new { id = "SeriesAction" })
-                    </li>
-                </ul>
-                @Html.Partial("_LoginPartial")
-            </div>
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            @Html.ActionLink(ConfigurationManager.AppSettings["appName"], "Index", "Home", new {area = ""}, new {@class = "navbar-brand"})
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li>
+                    @Ajax.ActionLink("Böcker", "BookList", "Admin", null, new AjaxOptions
+                    {
+                        UpdateTargetId = "target",
+                        InsertionMode = InsertionMode.Replace,
+                        LoadingElementId = "loaderDiv",
+                        OnFailure = "showXHRError"
+                    }, new {id = "BookAction"})
+                </li>
+                <li>
+                    @Ajax.ActionLink("Författare", "AuthorList", "Admin", null, new AjaxOptions
+                    {
+                        UpdateTargetId = "target",
+                        InsertionMode = InsertionMode.Replace,
+                        LoadingElementId = "loaderDiv",
+                        OnFailure = "showXHRError"
+                    }, new {id = "AuthorAction"})
+                </li>
+                <li>
+                    @Ajax.ActionLink("Uppläsare", "ReaderList", "Admin", null, new AjaxOptions
+                    {
+                        UpdateTargetId = "target",
+                        InsertionMode = InsertionMode.Replace,
+                        LoadingElementId = "loaderDiv",
+                        OnFailure = "showXHRError"
+                    }, new {id = "ReaderAction"})
+                </li>
+                <li>
+                    @Ajax.ActionLink("Serier", "SerieList", "Admin", null, new AjaxOptions
+                    {
+                        UpdateTargetId = "target",
+                        InsertionMode = InsertionMode.Replace,
+                        LoadingElementId = "loaderDiv",
+                        OnFailure = "showXHRError"
+                    }, new {id = "SeriesAction"})
+                </li>
+                <li>
+                    @Ajax.ActionLink("Förlag", "PublisherList", "Admin", null, new AjaxOptions
+                    {
+                        UpdateTargetId = "target",
+                        InsertionMode = InsertionMode.Replace,
+                        LoadingElementId = "loaderDiv",
+                        OnFailure = "showXHRError"
+                    }, new {id = "PublisherAction"})
+                </li>
+            </ul>
+            @Html.Partial("_LoginPartial")
         </div>
     </div>
-    <div class="container body-content">
-        @RenderBody()
-    </div>
+</div>
+<div class="container body-content">
+    @RenderBody()
+</div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/bundles/upload")
-    @Scripts.Render("~/bundles/app")
-    @RenderSection("scripts", required: false)
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+@Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/bundles/upload")
+@Scripts.Render("~/bundles/app")
+@RenderSection("scripts", false)
 </body>
 </html>

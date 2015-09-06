@@ -1,0 +1,31 @@
+﻿@model Business.DTO.NameViewModel
+
+<h3>Är du säker på att du vill radera förlaget?</h3>
+<div>
+
+    <hr/>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+    </dl>
+    @using (Ajax.BeginForm("DeletePublisher", "Admin", null, new AjaxOptions {UpdateTargetId = "target", HttpMethod = "POST", LoadingElementId = "loaderDiv"}, new {role = "form", id = "frmDeletePublisher"}))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Radera" class="btn btn-default"/> |
+            @Ajax.ActionLink("Tillbaka", "PublisherList", "Admin", null, new AjaxOptions
+            {
+                UpdateTargetId = "target",
+                InsertionMode = InsertionMode.Replace,
+                LoadingElementId = "loaderDiv",
+                OnFailure = "showXHRError"
+            }, new {id = "Back"})
+        </div>
+    }
+</div>

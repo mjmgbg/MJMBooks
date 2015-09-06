@@ -1,26 +1,21 @@
-﻿@model IEnumerable<Entities.AuthorModel>
-@{
+﻿@model IEnumerable<Business.DTO.PersonViewModel>
 
-}
 <div id="sidebar-wrapper2" class="sidebar-wrapper">
     <ul class=" sidebar-nav nav-pills nav-stacked" id="menu2">
-
-        @foreach (var item in Model)
+        @if (Model != null)
         {
-            <li>
-                @Ajax.ActionLink(linkText: item.DisplayFullName, actionName: "GetAuthors", controllerName: "Home", routeValues: new { id = item.Id },
-                    ajaxOptions: new AjaxOptions
+            foreach (var item in Model)
+            {
+                <li>
+                    @Ajax.ActionLink(item.DisplayFullName, "GetAuthors", "Home", new {id = item.Id}, new AjaxOptions
                     {
                         UpdateTargetId = "target",
                         InsertionMode = InsertionMode.Replace,
                         LoadingElementId = "loaderDiv",
-                        OnFailure = "showXHRError",
-                    },
-                     htmlAttributes: new { id = "authorsLink" + item.Id })
-            </li>
-
-            @*<li><a href="#"><input type="submit" class="menuopt" value="@item.Name" /></a></li>*@
-
+                        OnFailure = "showXHRError"
+                    }, new {id = "authorsLink" + item.Id})
+                </li>
+            }
         }
     </ul>
 </div>

@@ -1,135 +1,117 @@
-﻿@model MVC.Models.BookViewModel
+﻿@model Business.DTO.BookDetailDto
 @{
     // Model.GenreNames = Model.GenreNames.Replace(";", "\r\n");
-
 }
 
-@using (Ajax.BeginForm(actionName: "SaveBook", controllerName: "Admin", routeValues: null,
-    ajaxOptions: new AjaxOptions { UpdateTargetId = "target", HttpMethod = "POST", OnFailure = "showXHRError", LoadingElementId = "loaderDiv" },
-    htmlAttributes: new { id = "frmSave", role = "form" }))
+@using (Ajax.BeginForm("SaveBook", "Admin", null, new AjaxOptions {UpdateTargetId = "target", HttpMethod = "POST", OnFailure = "showXHRError", LoadingElementId = "loaderDiv"}, new {id = "frmSave", role = "form"}))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
         <h4>Bok information</h4>
-        <hr />
-        
+        <hr/>
+
         <div class="form-group">
-            @Html.LabelFor(model => model.Book.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Title, new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Book.Title, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Book.Title, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Title, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => model.Title, "", new {@class = "text-danger"})
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Book.ISBN, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Isbn, new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Book.ISBN, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Book.ISBN, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Isbn, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => model.Isbn, "", new {@class = "text-danger"})
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Book.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Description, new {@class = "control-label col-md-2"})
             <div class="col-md-10 ab">
-                @Html.TextAreaFor(model => model.Book.Description, new { cols = 60, rows = 10, @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Book.Description, "", new { @class = "text-danger" })
+                @Html.TextAreaFor(model => model.Description, new {cols = 60, rows = 10, @class = "form-control"})
+                @Html.ValidationMessageFor(model => model.Description, "", new {@class = "text-danger"})
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Book.PublishingDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.PublishingDate, new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Book.PublishingDate, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Book.PublishingDate, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.PublishingDate, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => model.PublishingDate, "", new {@class = "text-danger"})
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Book.AuthorNames, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.AuthorNames, new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Book.AuthorNames, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Book.AuthorNames, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.AuthorNames, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => model.AuthorNames, "", new {@class = "text-danger"})
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Book.ReaderNames, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.ReaderNames, new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Book.ReaderNames, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Book.ReaderNames, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.ReaderNames, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => model.ReaderNames, "", new {@class = "text-danger"})
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Book.SeriesName, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.SeriesName, new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Book.SeriesName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Book.SeriesName, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.SeriesName, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => model.SeriesName, "", new {@class = "text-danger"})
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Book.PublisherName, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.PublisherName, new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Book.PublisherName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Book.PublisherName, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.PublisherName, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => model.PublisherName, "", new {@class = "text-danger"})
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Book.Language, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Language, new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Book.Language, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Book.Language, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Language, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => model.Language, "", new {@class = "text-danger"})
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Book.GenreNames, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Book.GenreNames, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Book.GenreNames, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Book.IsRead, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.IsRead, new {@class = "control-label col-md-2"})
             <div class="col-md-10">
                 <div class="checkbox">
-                    @Html.EditorFor(model => model.Book.IsRead)
-                    @Html.ValidationMessageFor(model => model.Book.IsRead, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.IsRead)
+                    @Html.ValidationMessageFor(model => model.IsRead, "", new {@class = "text-danger"})
                 </div>
             </div>
         </div>
-        @Html.Partial("_upload", Model)
+        @Html.HiddenFor(model => model.ImagePath)
 
-        <div class="form-group hidden">
-            @Html.LabelFor(model => model.Book.ImagePath, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10 a">
-                @Html.EditorFor(model => model.Book.ImagePath, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Book.ImagePath, "", new { @class = "error" })
-            </div>
-        </div>
+        @Html.Partial("_uploadAdlibris", Model.File)
+
+
 
         <div class="form-group save-group">
             <div class="col-md-offset-2 col-md-10 save">
-                <input type="submit" value="Spara" class="btn btn-default btn-save" />
+                <input type="submit" value="Spara" class="btn btn-default btn-save"/>
             </div>
         </div>
     </div>
 }
 
 <div>
-    @Ajax.ActionLink(linkText: "Tillbaka",
-            actionName: "Index", controllerName: "Admin", routeValues: null,
-            ajaxOptions: new AjaxOptions
-            {
-                UpdateTargetId = "target",
-                InsertionMode = InsertionMode.Replace,
-                LoadingElementId = "loaderDiv",
-                OnFailure = "showXHRError"
-            },
-            htmlAttributes: new { id = "Back" })
+    @Ajax.ActionLink("Tillbaka", "Index", "Admin", null, new AjaxOptions
+    {
+        UpdateTargetId = "target",
+        InsertionMode = InsertionMode.Replace,
+        LoadingElementId = "loaderDiv",
+        OnFailure = "showXHRError"
+    }, new {id = "Back"})
 </div>

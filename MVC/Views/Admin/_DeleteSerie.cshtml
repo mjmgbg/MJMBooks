@@ -1,9 +1,9 @@
-﻿@model Entities.SeriesModel
+﻿@model Business.DTO.NameViewModel
 
 <h3>Är du säker på att du vill radera serien?</h3>
 <div>
     <h4>Radera serie</h4>
-    <hr />
+    <hr/>
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Name)
@@ -12,27 +12,20 @@
         <dd>
             @Html.DisplayFor(model => model.Name)
         </dd>
-
     </dl>
-@using (Ajax.BeginForm(actionName: "DeleteSerie", controllerName: "Admin", routeValues: null,
-    ajaxOptions: new AjaxOptions { UpdateTargetId = "target", HttpMethod = "POST", LoadingElementId = "loaderDiv" },
-    htmlAttributes: new { role = "form", id = "frmDeleteSerie" }))
-
-  {
+    @using (Ajax.BeginForm("DeleteSerie", "Admin", null, new AjaxOptions {UpdateTargetId = "target", HttpMethod = "POST", LoadingElementId = "loaderDiv"}, new {role = "form", id = "frmDeleteSerie"}))
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Radera" class="btn btn-default" /> |
-            @Ajax.ActionLink(linkText: "Tillbaka",
-            actionName: "SerieList", controllerName: "Admin", routeValues: null,
-            ajaxOptions: new AjaxOptions
+            <input type="submit" value="Radera" class="btn btn-default"/> |
+            @Ajax.ActionLink("Tillbaka", "SerieList", "Admin", null, new AjaxOptions
             {
                 UpdateTargetId = "target",
                 InsertionMode = InsertionMode.Replace,
                 LoadingElementId = "loaderDiv",
                 OnFailure = "showXHRError"
-            },
-            htmlAttributes: new { id = "Back" })
+            }, new {id = "Back"})
         </div>
     }
 </div>

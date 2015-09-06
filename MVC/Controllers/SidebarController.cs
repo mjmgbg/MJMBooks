@@ -1,41 +1,37 @@
-﻿using Entities;
-using MVC.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Configuration;
 using System.Web.Mvc;
+using Business;
+using Business.DTO;
 
 namespace MVC.Controllers
 {
-	public class SidebarController : Controller
-	{
-		private GetApiResponse<SeriesModel> seriesApiModel;
-		private GetApiResponse<AuthorModel> authorsApiModel;
-		private GetApiResponse<ReaderModel> readersApiModel;
-		public SidebarController()
-		{
-			seriesApiModel = new GetApiResponse<SeriesModel>();
-			authorsApiModel = new GetApiResponse<AuthorModel>();
-			readersApiModel = new GetApiResponse<ReaderModel>();
-		}
-		public ActionResult Series()
-		{
-			var model = new List<SeriesModel>();
-			model = seriesApiModel.GetAllSeriesFromDb("api/Serie?");
-			return PartialView("_Series",model);
-		}
-		public ActionResult Authors()
-		{
-			var model = new List<AuthorModel>();
-			model = authorsApiModel.GetAllAuthorsFromDb("api/Author?");
-			return PartialView("_Authors",model);
-		}
-		public ActionResult Readers()
-		{
-			var model = new List<ReaderModel>();
-			model = readersApiModel.GetAllReadersFromDb("api/Reader?");
-			return PartialView("_Readers",model);
-		}
-	}
+    public class SidebarController : Controller
+    {
+        private readonly GetApiResponse<NameViewModel> _nameApiModel;
+        private readonly GetApiResponse<PersonViewModel> _personApiModel;
+
+        public SidebarController()
+        {
+            _nameApiModel = new GetApiResponse<NameViewModel>(ConfigurationManager.AppSettings["apiBaseUri"]);
+            _personApiModel = new GetApiResponse<PersonViewModel>(ConfigurationManager.AppSettings["apiBaseUri"]);
+        }
+
+        public ActionResult Series()
+        {
+            var model = _nameApiModel.GetAllNamesFromDbNotAsync("api/Serie?");
+            return PartialView("_Series", model);
+        }
+
+        public ActionResult Authors()
+        {
+            var model = _personApiModel.GetAllPersonsFromDbNotAsync("api/Author?");
+            return PartialView("_Authors", model);
+        }
+
+        public ActionResult Readers()
+        {
+            var model = _nameApiModel.GetAllPersonsFromDbNotAsync("api/Reader?");
+            return PartialView("_Readers", model);
+        }
+    }
 }

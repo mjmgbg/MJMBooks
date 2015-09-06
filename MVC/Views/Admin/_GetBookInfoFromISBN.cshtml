@@ -1,32 +1,30 @@
-﻿@model MVC.Models.ISBNViewModel
+﻿@model Business.DTO.IsbnViewModel
 
-@using (Ajax.BeginForm(actionName: "GetInfoFromAdlibris", controllerName: "Admin", routeValues: null,
-    ajaxOptions: new AjaxOptions { UpdateTargetId = "target", HttpMethod = "POST", LoadingElementId = "loaderDiv" },
-    htmlAttributes: new { role = "form", id = "frmGetInfoFromAdlibris" }))
+@using (Ajax.BeginForm("GetInfoFromAdlibris", "Admin", null, new AjaxOptions {UpdateTargetId = "target", HttpMethod = "POST", LoadingElementId = "loaderDiv"}, new {role = "form", id = "frmGetInfoFromAdlibris"}))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        @if (Model!=null && Model.AlreadyInDb)
+        @if (Model != null && Model.AlreadyInDb)
         {
             <div id="error">
                 @Html.Partial("_ErrorMessage")
             </div>
         }
         <div class="form-group">
-            @Html.LabelFor(model => model.Isbn, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Isbn, new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Isbn, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.Isbn, new {htmlAttributes = new {@class = "form-control"}})
 
                 <div>
-                    @Html.ValidationMessageFor(model => model.Isbn, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Isbn, "", new {@class = "text-danger"})
                 </div>
             </div>
         </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Hämta infomation" class="btn btn-default" />
+                <input type="submit" value="Hämta infomation" class="btn btn-default"/>
             </div>
         </div>
     </div>

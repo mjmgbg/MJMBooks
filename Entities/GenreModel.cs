@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Entities
 {
-	public class GenreModel 
-	{
-		public int Id { get; set; }
-		[Display(Name = "Genre")]
-		public string Name { get; set; }
-		public List<BookModel> Books { get; set; }
-		public GenreModel()
-		{
-			Books = new List<BookModel>();
-		}
-	
-	}
+    public class GenreModel : IName
+    {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<BookModel> Books { get; set; } = new HashSet<BookModel>();
+    }
 }

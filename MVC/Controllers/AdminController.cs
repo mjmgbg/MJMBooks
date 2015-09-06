@@ -1,329 +1,506 @@
-﻿using Entities;
-using MVC.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Business;
+using Business.DTO;
 
 namespace MVC.Controllers
 {
-	[Authorize]
-	public class AdminController : Controller
-	{
-		private GetApiResponse<BookDetailDTO> adlibrisApiModel;
-		private GetApiResponse<BookModel> booksApiModel;
-		private GetApiResponse<SeriesModel> seriesApiModel;
-		private GetApiResponse<AuthorModel> authorsApiModel;
-		private GetApiResponse<ReaderModel> readersApiModel;
+    [Authorize]
+    public class AdminController : Controller
+    {
+        private readonly GetApiResponse<BookDetailDto> _adlibrisApiModel;
+        private readonly GetApiResponse<BookViewModel> _bookApiModel;
+        private readonly GetApiResponse<NameViewModel> _nameApiModel;
+        private readonly GetApiResponse<PersonViewModel> _personApiModel;
 
-		public AdminController()
-		{
-			adlibrisApiModel = new GetApiResponse<BookDetailDTO>();
-			booksApiModel = new GetApiResponse<BookModel>();
-			seriesApiModel = new GetApiResponse<SeriesModel>();
-			authorsApiModel = new GetApiResponse<AuthorModel>();
-			readersApiModel = new GetApiResponse<ReaderModel>();
-		}
 
-		public ActionResult Index()
-		{
-			return View();
-		}
-		#region "Serie"
-		public ActionResult SerieList()
-		{
-			var model = new List<SeriesModel>();
-			model = seriesApiModel.GetAllSeriesFromDb("api/Serie?");
-			return PartialView("_SerieList", model);
-		}
+        public AdminController()
+        {
+            _adlibrisApiModel = new GetApiResponse<BookDetailDto>(ConfigurationManager.AppSettings["apiBaseUri"]);
+            _bookApiModel = new GetApiResponse<BookViewModel>(ConfigurationManager.AppSettings["apiBaseUri"]);
+            _nameApiModel = new GetApiResponse<NameViewModel>(ConfigurationManager.AppSettings["apiBaseUri"]);
+            _personApiModel = new GetApiResponse<PersonViewModel>(ConfigurationManager.AppSettings["apiBaseUri"]);
+        }
 
-		public ActionResult AddSerie()
-		{
-			return PartialView("_AddSerie");
-		}
+        public ActionResult Index()
+        {
+            return View();
+        }
 
-		[HttpPost]
-		public async Task<ActionResult> SaveSerie(SeriesModel serie)
-		{
-			if (ModelState.IsValid)
-			{
-				var result = await seriesApiModel.SaveSerieToDb("api/Serie/", serie);
-				if (result)
-				{
-					return PartialView("_Saved");
-				}
-			}
-			return PartialView("_Error");
-		}
-		public ActionResult EditSerie(int id)
-		{
-			if (id > 0)
-			{
-				var serie = seriesApiModel.GetSerieFromDbById("api/Serie/", id);
-				if (serie!=null)
-				{
-					return PartialView("_EditSerie", serie);
-				}
-			}
-			return PartialView("_Error");
-		}
+        private async Task<List<NameViewModel>> ListEntity(string url, GetApiResponse<NameViewModel> api)
+        {
+            return await api.GetAllNamesFromDb(url);
+        }
 
-		[HttpPost]
-		public async Task<ActionResult> EditSerie(int id, SeriesModel model)
-		{
-			await seriesApiModel.UpdateSerie("api/Serie/", id.ToString(), model);
-			return PartialView("Index");
-			
-		}
-		public ActionResult DeleteSerie(int id)
-		{
-			var serie = seriesApiModel.GetSerieFromDbById("api/Serie/", id);
-			if (serie!=null)
-			{
-				return PartialView("_DeleteSerie", serie);
-			}
-			return PartialView("_Error");
-		}
+        private async Task<List<PersonViewModel>> ListEntity(string url, GetApiResponse<PersonViewModel> api)
+        {
+            return await api.GetAllPersonsFromDb(url);
+        }
 
-		[HttpPost]
-		public async Task<ActionResult> DeleteSerie(int id, SeriesModel model)
-		{
-			var result = await seriesApiModel.DeleteSerie("api/Serie/", id.ToString(), model);
-			if (result)
-			{
-				return PartialView("Index");
-			}
-			return PartialView("_Error");
-		}
-		#endregion
+        private async Task<ActionResult> ListEntity(string url, string view, GetApiResponse<NameViewModel> api)
+        {
+            var model = await api.GetAllNamesFromDb(url);
+            return PartialView(view, model);
+        }
 
-		#region "Reader"
-		public ActionResult ReaderList()
-		{
-			var model = new List<ReaderModel>();
-			model = readersApiModel.GetAllReadersFromDb("api/Reader?");
-			return PartialView("_ReaderList", model);
-		}
+        private async Task<ActionResult> ListEntity(string url, string view, GetApiResponse<PersonViewModel> api)
+        {
+            var model = await api.GetAllPersonsFromDb(url);
+            return PartialView(view, model);
+        }
 
-		public ActionResult AddReader()
-		{
-			return PartialView("_AddReader");
-		}
+        private async Task<ActionResult> SaveEntity(NameViewModel model, string url, GetApiResponse<NameViewModel> api)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await api.SaveNameToDb(url, model);
+                if (result)
+                {
+                    return PartialView("_Saved");
+                }
+            }
+            return PartialView("_Error");
+        }
 
-		[HttpPost]
-		public async Task<ActionResult> SaveReader(ReaderModel reader)
-		{
-			if (ModelState.IsValid)
-			{
-				var result = await readersApiModel.SaveReaderToDb("api/Reader/", reader);
-				if (result)
-				{
-					return PartialView("_Saved");
-				}
-			}
-			return PartialView("_Error");
-		}
-		public ActionResult EditReader(int id)
-		{
-			if (id > 0)
-			{
-				var reader = readersApiModel.GetReaderFromDbById("api/Reader/", id);
-				if (reader != null)
-				{
-					return PartialView("_EditReader", reader);
-				}
-			}
-			return PartialView("_Error");
-		}
+        private async Task<ActionResult> SaveEntity(PersonViewModel model, string url,
+            GetApiResponse<PersonViewModel> api)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await api.SavePersonToDb(url, model);
+                if (result)
+                {
+                    return PartialView("_Saved");
+                }
+            }
+            return PartialView("_Error");
+        }
 
-		[HttpPost]
-		public async Task<ActionResult> EditReader(int id, ReaderModel model)
-		{
-			await readersApiModel.UpdateReader("api/Reader/", id.ToString(), model);
-			return PartialView("Index");
+        private async Task<ActionResult> EditEntity(int id, string url, string view, GetApiResponse<NameViewModel> api)
+        {
+            if (id == 0)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var entity = await api.GetNameFromDbById(url, id);
+            if (entity == null)
+            {
+                return HttpNotFound();
+            }
+            return PartialView(view, entity);
+        }
 
-		}
-		public ActionResult DeleteReader(int id)
-		{
-			var reader = readersApiModel.GetReaderFromDbById("api/Reader/", id);
-			if (reader != null)
-			{
-				return PartialView("_DeleteReader", reader);
-			}
-			return PartialView("_Error");
-		}
+        private async Task<ActionResult> EditEntity(int id, string url, string view, GetApiResponse<PersonViewModel> api)
+        {
+            if (id == 0)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var entity = await api.GetPersonFromDbById(url, id);
+            if (entity == null)
+            {
+                return HttpNotFound();
+            }
+            return PartialView(view, entity);
+        }
 
-		[HttpPost]
-		public async Task<ActionResult> DeleteReader(int id, ReaderModel model)
-		{
-			var result = await readersApiModel.DeleteReader("api/Reader/", id.ToString(), model);
-			if (result)
-			{
-				return PartialView("Index");
-			}
-			return PartialView("_Error");
-		}
-		#endregion
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        private async Task<ActionResult> EditEntity(int id, NameViewModel model, string url, string view,
+            string errorView, GetApiResponse<NameViewModel> api)
+        {
+            var entity = await api.UpdateName(url, id.ToString(), model);
+            if (ModelState.IsValid)
+            {
+                if (entity != null)
+                {
+                    return PartialView(view);
+                }
+            }
+            return PartialView(errorView, entity);
+        }
 
-		#region "Author"
-		public ActionResult AuthorList()
-		{
-			var model = new List<AuthorModel>();
-			model = authorsApiModel.GetAllAuthorsFromDb("api/Author?");
-			return PartialView("_AuthorList", model);
-		}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        private async Task<ActionResult> EditEntity(int id, PersonViewModel model, string url, string view,
+            string errorView, GetApiResponse<PersonViewModel> api)
+        {
+            var entity = await api.UpdatePerson(url, id.ToString(), model);
+            if (ModelState.IsValid)
+            {
+                if (entity != null)
+                {
+                    return PartialView(view);
+                }
+            }
+            return PartialView(errorView, entity);
+        }
 
-		public ActionResult AddAuthor()
-		{
-			return PartialView("_AddAuthor");
-		}
+        private async Task<ActionResult> DeleteEntity(int id, string url, string view, string errorView,
+            GetApiResponse<NameViewModel> api)
+        {
+            var publisher = await api.GetNameFromDbById(url, id);
+            if (publisher != null)
+            {
+                return PartialView(view, publisher);
+            }
+            return PartialView(errorView);
+        }
 
-		[HttpPost]
-		public async Task<ActionResult> SaveAuthor(AuthorModel author)
-		{
-			if (ModelState.IsValid)
-			{
-				var result = await authorsApiModel.SaveAuthorToDb("api/Author/", author);
-				if (result)
-				{
-					return PartialView("_Saved");
-				}
-			}
-			return PartialView("_Error");
-		}
-		public ActionResult EditAuthor(int id)
-		{
-			if (id > 0)
-			{
-				var author = authorsApiModel.GetAuthorFromDbById("api/Author/", id);
-				if (author != null)
-				{
-					return PartialView("_EditAuthor", author);
-				}
-			}
-			return PartialView("_Error");
-		}
+        private async Task<ActionResult> DeleteEntity(int id, string url, string view, string errorView,
+            GetApiResponse<PersonViewModel> api)
+        {
+            var publisher = await api.GetPersonFromDbById(url, id);
+            if (publisher != null)
+            {
+                return PartialView(view, publisher);
+            }
+            return PartialView(errorView);
+        }
 
-		[HttpPost]
-		public async Task<ActionResult> EditAuthor(int id, AuthorModel model)
-		{
-			await authorsApiModel.UpdateAuthor("api/Author/", id.ToString(), model);
-			return PartialView("Index");
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        private async Task<ActionResult> DeleteEntity(int id, NameViewModel model, string url, string view,
+            string errorView, GetApiResponse<NameViewModel> api)
+        {
+            var result = await api.DeleteName(url, id.ToString());
+            if (result)
+            {
+                return PartialView(view);
+            }
+            return PartialView(errorView);
+        }
 
-		}
-		public ActionResult DeleteAuthor(int id)
-		{
-			var author = authorsApiModel.GetAuthorFromDbById("api/Author/", id);
-			if (author != null)
-			{
-				return PartialView("_DeleteAuthor", author);
-			}
-			return PartialView("_Error");
-		}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        private async Task<ActionResult> DeleteEntity(int id, PersonViewModel model, string url, string view,
+            string errorView, GetApiResponse<PersonViewModel> api)
+        {
+            var result = await api.DeletePerson(url, id.ToString());
+            if (result)
+            {
+                return PartialView(view);
+            }
+            return PartialView(errorView);
+        }
 
-		[HttpPost]
-		public async Task<ActionResult> DeleteAuthor(int id, AuthorModel model)
-		{
-			var result = await authorsApiModel.DeleteAuthor("api/Author/", id.ToString(), model);
-			if (result)
-			{
-				return PartialView("Index");
-			}
-			return PartialView("_Error");
-		}
-		#endregion
-		
-		#region "Book"
-		public ActionResult BookList()
-		{
-			var model = new List<BookModel>();
-			model = booksApiModel.GetAllBooksFromDb("api/Book?");
-			return PartialView("_BookList", model);
-		}
-		[HttpPost]
-		public async Task<ActionResult> GetInfoFromAdlibris(ISBNViewModel model)
-		{
-			if (model == null)
-			{
-				throw new ArgumentNullException("model");
-			}
-			if (ModelState.IsValid)
-			{
-				var savedInDb = await booksApiModel.IsBookInDb("api/Book?isbn=", model.Isbn);
-				model.AlreadyInDb = savedInDb;
+        private async Task GetDropDownLists(BookViewModel book)
+        {
+            var authorList = await ListEntity("api/Author?", _personApiModel);
+            var readerList = await ListEntity("api/Reader?", _personApiModel);
 
-				if (model.AlreadyInDb)
-				{
-					return PartialView("_ISBN", model);
-				}
-				var bookModel = new BookViewModel();
+            book.LanguageChoices = new SelectList(await ListEntity("api/Language?", _nameApiModel), "Id", "Name",
+                book.LanguageId);
+            book.PublisherChoices = new SelectList(await ListEntity("api/Publisher?", _nameApiModel), "Id", "Name",
+                book.PublisherId);
+            book.SeriesChoices = new SelectList(await ListEntity("api/Serie?", _nameApiModel), "Id", "Name",
+                book.SeriesId);
+            book.SeriesPartChoices = new SelectList(await ListEntity("api/SeriePart?", _nameApiModel), "Id", "Name",
+                book.SeriesPartId);
+            
+            book.AuthorsList = book.Authors.Select(a => a.Id).ToArray();
+            book.AuthorsChoices = new SelectList(authorList, "Id", "DisplayFullName", book.AuthorsList);
 
-				adlibrisApiModel.BookForAdLibris = adlibrisApiModel.GetBookFromAdlibris(model.Isbn, "api/AdLibris/");
-				bookModel.Book = adlibrisApiModel.BookForAdLibris;
-				return PartialView("_BookInfo", bookModel);
-			}
+            book.ReadersList = book.Authors.Select(r => r.Id).ToArray();
+            book.ReadersChoices = new SelectList(readerList, "Id", "DisplayFullName", book.ReadersList);
 
-			return PartialView("_ISBN", model);
-		}
 
-		[HttpPost]
-		public async Task<ActionResult> SaveBook(BookViewModel model)
-		{
-			if (ModelState.IsValid)
-			{
-				var result = await booksApiModel.SaveBookToDb("api/Book/", model.Book);
-				if (result)
-				{
-					return PartialView("_BookSaved");
-				}
-			}
-			return PartialView("_Error");
-		}
+        }
 
-		public ActionResult EditBook(int id)
-		{
-			if (id > 0)
-			{
-				var book = booksApiModel.GetBookFromDbById("api/Book/", id);
-				if (book.Id > 0)
-				{
-					return PartialView("_EditBook", book);
-				}
-			}
-			return PartialView("_Error");
-		}
+        public async Task<ActionResult> PublisherList()
+        {
+            return await ListEntity("api/Publisher?", "_PublisherList", _nameApiModel);
+        }
 
-		[HttpPost]
-		public async Task<ActionResult> EditBook(int id, BookModel model)
-		{
-			var resultView = await booksApiModel.UpdateBook("api/Book/", id.ToString(), model);
-			if (resultView.Book.Id > 0)
-			{
-				return PartialView("Index");
-			}
-			return PartialView("_Error");
-		}
+        public ActionResult AddPublisher()
+        {
+            return PartialView("_AddPublisher");
+        }
 
-		public ActionResult DeleteBook(int id)
-		{
-			var book = booksApiModel.GetBookFromDbById("api/Book/", id);
-			if (book.Id > 0)
-			{
-				return PartialView("_DeleteBook", book);
-			}
-			return PartialView("_Error");
-		}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> SavePublisher(NameViewModel model)
+        {
+            return await SaveEntity(model, "api/Publisher/", _nameApiModel);
+        }
 
-		[HttpPost]
-		public async Task<ActionResult> DeleteBook(int id, BookModel model)
-		{
-			var result = await booksApiModel.DeleteBook("api/Book/", id.ToString(), model);
-			if (result)
-			{
-				return PartialView("Index");
-			}
-			return PartialView("_Error");
-		}
-		#endregion
-	}
+        public async Task<ActionResult> EditPublisher(int id)
+        {
+            return await EditEntity(id, "api/Publisher/", "_EditPublisher", _nameApiModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditPublisher(int id, NameViewModel model)
+        {
+            return await EditEntity(id, model, "api/Publisher/", "Index", "_EditPublisher", _nameApiModel);
+        }
+
+        public async Task<ActionResult> DeletePublisher(int id)
+        {
+            return await DeleteEntity(id, "api/Publisher/", "_DeletePublisher", "_Error", _nameApiModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeletePublisher(int id, NameViewModel model)
+        {
+            return await DeleteEntity(id, model, "api/Publisher/", "Index", "_Error", _nameApiModel);
+        }
+
+
+        public async Task<ActionResult> SerieList()
+        {
+            return await ListEntity("api/Serie?", "_SerieList", _nameApiModel);
+        }
+
+        public ActionResult AddSerie()
+        {
+            return PartialView("_AddSerie");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> SaveSerie(NameViewModel model)
+        {
+            return await SaveEntity(model, "api/Serie/", _nameApiModel);
+        }
+
+        public async Task<ActionResult> EditSerie(int id)
+        {
+            return await EditEntity(id, "api/Serie/", "_EditSerie", _nameApiModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditSerie(int id, NameViewModel model)
+        {
+            return await EditEntity(id, model, "api/Serie/", "Index", "_EditSerie", _nameApiModel);
+        }
+
+        public async Task<ActionResult> DeleteSerie(int id)
+        {
+            return await DeleteEntity(id, "api/Serie/", "_DeleteSerie", "_Error", _nameApiModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteSerie(int id, NameViewModel model)
+        {
+            return await DeleteEntity(id, model, "api/Serie/", "Index", "_Error", _nameApiModel);
+        }
+
+
+        public async Task<ActionResult> ReaderList()
+        {
+            return await ListEntity("api/Reader?", "_ReaderList", _personApiModel);
+        }
+
+        public ActionResult AddReader()
+        {
+            return PartialView("_AddReader");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> SaveReader(PersonViewModel model)
+        {
+            return await SaveEntity(model, "api/Reader/", _personApiModel);
+        }
+
+        public async Task<ActionResult> EditReader(int id)
+        {
+            return await EditEntity(id, "api/Reader/", "_EditReader", _personApiModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditReader(int id, PersonViewModel model)
+        {
+            return await EditEntity(id, model, "api/Reader/", "Index", "_EditReader", _personApiModel);
+        }
+
+        public async Task<ActionResult> DeleteReader(int id)
+        {
+            return await DeleteEntity(id, "api/Reader/", "_DeleteReader", "_Error", _personApiModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteReader(int id, PersonViewModel model)
+        {
+            return await DeleteEntity(id, model, "api/Reader/", "Index", "_Error", _personApiModel);
+        }
+
+
+        public async Task<ActionResult> AuthorList()
+        {
+            return await ListEntity("api/Author?", "_AuthorList", _personApiModel);
+        }
+
+        public ActionResult AddAuthor()
+        {
+            return PartialView("_AddAuthor");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> SaveAuthor(PersonViewModel model)
+        {
+            return await SaveEntity(model, "api/Author/", _personApiModel);
+        }
+
+        public async Task<ActionResult> EditAuthor(int id)
+        {
+            return await EditEntity(id, "api/Author/", "_EditAuthor", _personApiModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditAuthor(int id, PersonViewModel model)
+        {
+            return await EditEntity(id, model, "api/Author/", "Index", "_EditAuthor", _personApiModel);
+        }
+
+        public async Task<ActionResult> DeleteAuthor(int id)
+        {
+            return await DeleteEntity(id, "api/Author/", "_DeleteAuthor", "_Error", _personApiModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteAuthor(int id, PersonViewModel model)
+        {
+            return await DeleteEntity(id, model, "api/Author/", "Index", "_Error", _personApiModel);
+        }
+
+        public async Task<ActionResult> BookList()
+        {
+            var model = await _bookApiModel.GetAllBooksFromDb("api/Book?");
+            return PartialView("_BookList", model);
+        }
+
+        public ActionResult AddBook()
+        {
+            return PartialView("_ISBN");
+        }
+
+        //TODO:Add book without info from adlibris
+        public ActionResult CreateBook()
+        {
+           return null;
+        }
+
+        //Add book without info from adlibris
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CreateBook(
+            [Bind(
+                Include =
+                    "Id,Title,ImagePath,ISBN,LanguageId,PublishingDate,PublisherId,Description,BgColor,TextColor,TextColorSecond,SeriesId,SeriesPartId,CreateDate,UpdateDate,IsRead"
+                )] BookViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _bookApiModel.SaveBookToDb("api/Book/", model);
+                if (result)
+                {
+                    return PartialView("_Saved");
+                }
+            }
+            return PartialView("_Error");
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> GetInfoFromAdlibris(IsbnViewModel model)
+        {
+            if (!ModelState.IsValid) return PartialView("_ISBN", model);
+            var savedInDb = await _bookApiModel.IsBookInDb("api/Book?isbn=", model.Isbn);
+            model.AlreadyInDb = savedInDb;
+
+            if (model.AlreadyInDb)
+            {
+                return PartialView("_ISBN", model);
+            }
+            var bookModel = _adlibrisApiModel.GetBookFromAdlibris(model.Isbn, "api/AdLibris/");
+            return PartialView("_BookInfo", bookModel);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> SaveBook(BookDetailDto model)
+        {
+            if (!ModelState.IsValid) return PartialView("_BookInfo", model);
+            var result = await _bookApiModel.SaveBookToDb("api/Book/", model);
+            return PartialView(!result ? "_Error" : "_Saved");
+        }
+
+        public async Task<ActionResult> EditBook(int id)
+        {
+            if (id == 0)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var book = await _bookApiModel.GetBookFromDbById("api/Book/", id);
+            if (book == null)
+            {
+                return HttpNotFound();
+            }
+
+            await GetDropDownLists(book);
+            return PartialView("_EditBook", book);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditBook(int id, BookViewModel model)
+        {
+            var book = await _bookApiModel.UpdateBook("api/Book/", id.ToString(), model);
+            if (ModelState.IsValid)
+            {
+                if (book != null)
+                {
+                    return PartialView("Index");
+                }
+            }
+
+            await GetDropDownLists(book);
+            return PartialView("_EditBook", book);
+            
+        }
+
+        public async Task<ActionResult> DeleteBook(int id)
+        {
+            var book = await _bookApiModel.GetBookFromDbById("api/Book/", id);
+            if (book.Id > 0)
+            {
+                return PartialView("_DeleteBook", book);
+            }
+            return PartialView("_Error");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteBook(int id, BookViewModel model)
+        {
+            var result = await _bookApiModel.DeleteBook("api/Book/", id.ToString());
+            if (result)
+            {
+                return PartialView("Index");
+            }
+            return PartialView("_Error");
+        }
+
+        //TODO: Needs Implementation
+        public ActionResult EditSeriePart()
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

@@ -1,56 +1,56 @@
-﻿using Data;
-using Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+﻿using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Web.OData;
+using Business;
+using Business.DTO;
+using Data;
+using Entities;
 
 namespace WebAPI.Controllers
 {
-	[EnableCors("http://localhost:3603,http://mjmbooks.azurewebsites.net,http://books.maaninka.nu", "*", "*")]
-	public class ReaderController : ApiController
-	{
-		private ReadersRepository repo;
-		private DBContextBook context;
-		public ReaderController()
-		{
-			context = new DBContextBook();
-			repo = new ReadersRepository(context);
-		}
+    [EnableCors("http://localhost:3603,http://mjmbooks.azurewebsites.net,http://books.maaninka.nu", "*", "*")]
+    public class ReaderController : ApiController
+    {
+        private readonly UnitOfWork _uow;
 
-		[EnableQuery()]
-		public IQueryable<ReaderModel> Get()
-		{
-			return repo.GetAllReaders().AsQueryable();
-		}
-		public ReaderModel Get(int id)
-		{
-			try
-			{
-				return repo.GetReaderById(id);
+        public ReaderController()
+        {
+            _uow = new UnitOfWork();
+        }
 
-			}
-			catch (Exception)
-			{
-				throw;
-			}
-		}
-		public void Post([FromBody]ReaderModel model)
-		{
-			repo.Add(model);
-		}
-		public void Put(int id, [FromBody]ReaderModel model)
-		{
-			repo.Edit(model);
-		}
+        [EnableQuery]
+        public IQueryable<PersonViewModel> Get()
+        {
+            return Converters.ConvertPersonDbToModel(_uow.ReaderRepository.GetAll().ToList()).AsQueryable();
+        }
 
-		public void Delete(int id)
-		{
-			repo.Delete(id);
-		}
-	}
+        public PersonViewModel Get(int id)
+        {
+            return Converters.ConvertPersonDbToModel(_uow.ReaderRepository.GetById(id));
+        }
+
+        public void Post([FromBody] PersonViewModel model)
+        {
+            var entity = Converters.ConvertModelPersonToDb<ReaderModel>(model);
+            _uow.ReaderRepository.InsertOrUpdate(entity);
+            _uow.Commit();
+        }
+
+        public void Put(int id, [FromBody] PersonViewModel model)
+        {
+            var entity = Converters.ConvertModelPersonToDb<ReaderModel>(model);
+            _uow.ReaderRepository.InsertOrUpdate(entity);
+            _uow.Commit();
+        }
+
+        public void Delete(int id)
+        {
+            if (id > 0)
+            {
+                _uow.ReaderRepository.Delete(id);
+                _uow.Commit();
+            }
+        }
+    }
 }

@@ -1,57 +1,56 @@
-﻿using Data;
-using Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+﻿using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Web.OData;
+using Business;
+using Business.DTO;
+using Data;
+using Entities;
 
 namespace WebAPI.Controllers
 {
-	[EnableCors("http://localhost:3603,http://mjmbooks.azurewebsites.net, http://books.maaninka.nu", "*", "*")]
-	public class AuthorController : ApiController
-	{
-		private AuthorsRepository repo;
-		private DBContextBook context;
-		public AuthorController()
-		{
-			context = new DBContextBook();
-			repo = new AuthorsRepository(context);
+    [EnableCors("http://localhost:3603,http://mjmbooks.azurewebsites.net, http://books.maaninka.nu", "*", "*")]
+    public class AuthorController : ApiController
+    {
+        private readonly UnitOfWork _uow;
 
-		}
+        public AuthorController()
+        {
+            _uow = new UnitOfWork();
+        }
 
-		[EnableQuery()]
-		public IQueryable<AuthorModel> Get()
-		{
-			return repo.GetAllAuthors().AsQueryable();
-		}
-		public AuthorModel Get(int id)
-		{
-			try
-			{
-				return repo.GetAuthorById(id);
+        [EnableQuery]
+        public IQueryable<PersonViewModel> Get()
+        {
+            return Converters.ConvertPersonDbToModel(_uow.AuthorRepository.GetAll()).AsQueryable();
+        }
 
-			}
-			catch (Exception)
-			{
-				throw;
-			}
-		}
-		public void Post([FromBody]AuthorModel model)
-		{
-			repo.Add(model);
-		}
-		public void Put(int id, [FromBody]AuthorModel model)
-		{
-			repo.Edit(model);
-		}
+        public PersonViewModel Get(int id)
+        {
+            return Converters.ConvertPersonDbToModel(_uow.AuthorRepository.GetById(id));
+        }
 
-		public void Delete(int id)
-		{
-			repo.Delete(id);
-		}
-	}
+        public void Post([FromBody] PersonViewModel model)
+        {
+            var entity = Converters.ConvertModelPersonToDb<AuthorModel>(model);
+            _uow.AuthorRepository.InsertOrUpdate(entity);
+            _uow.Commit();
+        }
+
+        public void Put(int id, [FromBody] PersonViewModel model)
+        {
+            var entity = Converters.ConvertModelPersonToDb<AuthorModel>(model);
+            _uow.AuthorRepository.InsertOrUpdate(entity);
+            _uow.Commit();
+        }
+
+        public void Delete(int id)
+        {
+            if (id > 0)
+            {
+                _uow.AuthorRepository.Delete(id);
+                _uow.Commit();
+            }
+        }
+    }
 }
